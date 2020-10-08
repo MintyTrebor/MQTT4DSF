@@ -1,0 +1,11 @@
+[Unit]
+Description=DSFMQTT
+After=multi-user.target
+[Service]
+WorkingDirectory=/opt/dsf/plugins/DSFMQTT
+User=pi
+Type=idle
+ExecStart=/usr/bin/python3 /opt/dsf/plugins/DSFMQTT.py &> /dev/null
+Restart=always
+[Install]
+WantedBy=multi-user.target
