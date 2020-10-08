@@ -18,7 +18,7 @@ s_MachineName = "Unknown"
 # load DSFMQTT_Config.json & setup system variables and MQTT connection
 # assumes file is in the same location as this script
 try:
-    with open("DSFMQTT_Config.json") as config_file:
+    with open("/opt/dsf/plugins/DSFMQTT/DSFMQTT.py") as config_file:
         config_json = json.load(config_file)
         MQTT_SVR_Add = config_json["MQTT_SETTINGS"]["MQTT_SVR_ADD"]
         MQTT_SVR_Port = config_json["MQTT_SETTINGS"]["MQTT_SVR_PORT"]
