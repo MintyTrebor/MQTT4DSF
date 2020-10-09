@@ -39,16 +39,16 @@ DSFMQTT has a delayed 30 start to ensure DSF is running after boot of the pi.
 
 MQTT Broker Config:
 The default config uses the following topics to sends messages to:
-Duet/Announce
-Duet/[!*MachineName*!]
-Duet/[!*MachineName*!]/currtool
-Duet/[!*MachineName*!]/jobname
-Duet/[!*MachineName*!]/joblayer
-Duet/[!*MachineName*!]/timesleft
-Duet/[!*MachineName*!]/temps
-Duet/[!*MachineName*!]/status
-Duet/[!*MachineName*!]/dsfmsg
-Duet/[!*MachineName*!]/displaymsg
+
+ - Duet/Announce Duet/[!*MachineName*!] 
+ - Duet/[!*MachineName*!]/currtool
+ - Duet/[!*MachineName*!]/jobname 
+ - Duet/[!*MachineName*!]/joblayer
+ - Duet/[!*MachineName*!]/timesleft 
+ - Duet/[!*MachineName*!]/temps
+ - Duet/[!*MachineName*!]/status
+ - Duet/[!*MachineName*!]/dsfmsg
+ - Duet/[!*MachineName*!]/displaymsg
 
 The system will automatically replace [!*MachineName*!] with the machine name you enter in the DSFMQTT_Config.json (see below). For example if you enter your machine name as ***DAFFY*** then the topic path will be Duet/DAFFY/currtool
 
