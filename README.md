@@ -69,7 +69,7 @@ A standard log file is located in /var/log/DSFMQTT.log
 All configuration is done through DSFMQTT_Config.json which is accessible via the SYS folder of DWC. Currently when you make any changes you will need to restart the DSFMQTT service.
 
 ***Initial Configuration***
--Update "MQTT_SETTINGS" with you MQTT broker settings:
+-Update "MQTT_SETTINGS" with your MQTT broker settings:
 
     "MQTT_SVR_ADD" : "10.66.1.51",
     "MQTT_SVR_PORT" : 1883,
