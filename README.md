@@ -24,7 +24,7 @@ Please refer to the other_setup_steps.txt for an example of how to install all o
 
 Once the dependencies are installed and running, run the following command from your home folder :
 
-    sudo wget -O - https://github.com/MintyTrebor/DSFMQTT/releases/download/v0.01-ALPHA/Install_DSFMQTT.sh | bash
+    sudo wget -O - https://github.com/MintyTrebor/DSFMQTT/releases/download/v0.02-ALPHA/Install_DSFMQTT.sh | bash
 
 This will deploy DSFMQTT as a service to the DSF plugin directory.
 
