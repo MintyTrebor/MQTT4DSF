@@ -62,6 +62,8 @@ A standard log file is located in /var/log/DSFMQTT.log
 
 # Configuration
 All configuration is done through DSFMQTT_Config.json available in the SYS folder of DWC.
+Currently when you make any changes you will need to restart the DSFMQTT service.
+(Plans include a DWC GUI plugin to enable easy configuration, - hence the use of json for config storage but it will take a while - sorry!)
 
 ***Initial Configuration***
 -Update "MQTT_SETTINGS" with you MQTT broker settings:
@@ -77,4 +79,30 @@ Note : Secure MQTT is in testing!
 -In "GENERAL SETTINGS" update "MACHINE_NAME" to your machine name. Other "GENERAL_SETTINGS" can be updated as required, but the standard settings should work for most cases.
 
 ***DSF Event based mqtt messages***
-more to come!
+This class of msg is "pushed" to DSFMQTT from the DSF Service via the API, configured in the "MQTT_MESSAGES" section of the DSFMQTT_Config.json.
+
+    {
+	    "MsgName" : "Machine Status",
+	    "DSF_DOM_Filter" : "state/status",
+	    "Type" : "STD",
+	    "Enabled" : "Y",
+	    "JSON_Variables" : [
+		    {"Variable" : "state/status", "Replace_String" : "[!*Status*!]", "Var_Type" : "string", "Msg_Delta" : 0, "lastval" : "noLast"}
+		    ],
+		"Msgs" : [
+			{"MQTT_Topic_Path" : "Duet/Announce", "MQTT_Topic_MSG" : "The Machine [!*MachineName*!] has changed its state to: [!*Status*!]"},
+			{"MQTT_Topic_Path" : "Duet/[!*MachineName*!]/status", "MQTT_Topic_MSG" : "[!*Status*!]"}
+		]
+	}
+			
+
+ - "DSF_DOM_Filter"  sets a filter for the DSF event service so that it only pushes updates when the specified value changes. The path should follow the DSF Object Model (which you can browse by activating the Object Model plugin in DWC. The pattern should follow *object/object/variable*. Do not try and filter on objects. If you wish to include more than one variable in the "DSF_DOM_Filter" use *|* as the separator eg  *object/object/variable|object/variable*.
+ - "Type" should be set to "STD" for user defined msgs.
+ - "Enabled" = "Y"/"N" to enable or disable the msg.
+ - "JSON_Variables" are the fields you wish to include in this mqtt msg. 
+ - Each "JSON_Variables/Variable" entry allows you to define the value to include in the msg text. Normally this should echo the "DSF_DOM_Filter" path. If you have defined more than one variable in the "DSF_DOM_Filter" path then add as many "JSON_Variables/Variable" entries as required.
+ - "JSON_Variables/Variable/Replace_String" allows you specify the string that identifies where the value should be placed in your msg text.
+ - "JSON_Variables/Variable/Var_Type" can be one of three values "string", "int", & "time" (normally seconds).
+ - "JSON_Variables/Variable/Msg_Delta" sets the value by how much the  "JSON_Variables/Variable" should change before a msg is sent. Set to 0 to ignore (0 should be the default for "JSON_Variables/Variable/Var_Type" = "string")
+ - "JSON_Variables/Variable/lastval" must be set to "noLast"
+ - "Msgs" are where the MQTT Topic and Msg Text are defined. See the example above for reference. Note how the "JSON_Variables/Variable/Replace_String" value is used to define where the value will go in the msg. [!*MachineName*!] is a system variable which can be used anywhere.
