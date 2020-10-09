@@ -24,7 +24,7 @@ Please refer to the other_setup_steps.txt for an example of how to install all o
 
 Once the dependencies are installed and running, run the following command from your home folder :
 
-    sudo wget -O - https://github.com/MintyTrebor/DSFMQTT/releases/download/v0.02-ALPHA/Install_DSFMQTT.sh | bash
+    sudo wget -O - https://github.com/MintyTrebor/DSFMQTT/releases/download/v0.01-ALPHA/Install_DSFMQTT.sh | bash
 
 This will deploy DSFMQTT as a service to the DSF plugin directory.
 
@@ -55,7 +55,8 @@ The system will automatically replace [!*MachineName*!] with the machine name yo
 
 To see DSFMQTT system msgs you can also use:
 
- - Duet/DSFMQTT/sysmsg Duet/DSFMQTT/log
+ - Duet/DSFMQTT/sysmsg 
+ - Duet/DSFMQTT/log
 
 A standard log file is located in /var/log/DSFMQTT.log
 
@@ -67,9 +68,11 @@ All configuration is done through DSFMQTT_Config.json available in the SYS folde
 
     "MQTT_SVR_ADD" : "10.66.1.51",
     "MQTT_SVR_PORT" : 1883,
-    "MQTT_Client_Name" : "DSFMQTT"
+    "MQTT_Client_Name" : "DSFMQTT",
+    "MQTT_UserName" : "YourUsrNm",
+    "MQTT_Password" : "YourPassword"
 
-Note : Secure MQTT is not currently supported
+Note : Secure MQTT is in testing!
 
 -In "GENERAL SETTINGS" update "MACHINE_NAME" to your machine name. Other "GENERAL_SETTINGS" can be updated as required, but the standard settings should work for most cases.
 
