@@ -37,6 +37,28 @@ Enter `sudo systemctl stop DSFMQTT.service` to stop DSFMQTT
 
 DSFMQTT has a delayed 30 start to ensure DSF is running after boot of the pi.
 
+MQTT Broker Config:
+The default config uses the following topics to sends messages to:
+Duet/Announce
+Duet/[!*MachineName*!]
+Duet/[!*MachineName*!]/currtool
+Duet/[!*MachineName*!]/jobname
+Duet/[!*MachineName*!]/joblayer
+Duet/[!*MachineName*!]/timesleft
+Duet/[!*MachineName*!]/temps
+Duet/[!*MachineName*!]/status
+Duet/[!*MachineName*!]/dsfmsg
+Duet/[!*MachineName*!]/displaymsg
+
+The system will automatically replace [!*MachineName*!] with the machine name you enter in the DSFMQTT_Config.json (see below). For example if you enter your machine name as ***DAFFY*** then the topic path will be Duet/DAFFY/currtool
+
+
+To see DSFMQTT system msgs you can also use:
+
+ - Duet/DSFMQTT/sysmsg Duet/DSFMQTT/log
+
+A standard log file is located in /var/log/DSFMQTT.log
+
 # Configuration
 All configuration is done through DSFMQTT_Config.json available in the SYS folder of DWC.
 
@@ -52,4 +74,4 @@ Note : Secure MQTT is not currently supported
 -In "GENERAL SETTINGS" update "MACHINE_NAME" to your machine name. Other "GENERAL_SETTINGS" can be updated as required, but the standard settings should work for most cases.
 
 ***DSF Event based mqtt messages***
-TBC
+
