@@ -34,11 +34,14 @@ try:
         MQTT_SVR_Add = config_json["MQTT_SETTINGS"]["MQTT_SVR_ADD"]
         MQTT_SVR_Port = config_json["MQTT_SETTINGS"]["MQTT_SVR_PORT"]
         MQTT_Client_Name = config_json["MQTT_SETTINGS"]["MQTT_Client_Name"]
+        MQTT_User_Name = config_json["MQTT_SETTINGS"]["MQTT_UserName"]
+        MQTT_Password = config_json["MQTT_SETTINGS"]["MQTT_Password"]
         
         
         # Setup MQTT Client Connection
         MQTT_SVR_Port = int(MQTT_SVR_Port)
         client = mqtt.Client(str(MQTT_Client_Name))
+        client.username_pw_set(username=MQTT_User_Name,password=MQTT_Password)
         client.connect(MQTT_SVR_Add,MQTT_SVR_Port)
 
         # Get Fixed Sys Variables and paramters from the config json
@@ -109,9 +112,11 @@ def MsgQueueMonitor():
     global q_MQTT_MSG
     try:
         client2 = mqtt.Client(str(MQTT_Client_Name))
+
         while True:
             o_TMP_QueueItem = q_MQTT_MSG.get()
             logging.info("About to send : " + str(o_TMP_QueueItem[1]) + " To : " + str(o_TMP_QueueItem[0]))
+            client2.username_pw_set(username=MQTT_User_Name,password=MQTT_Password)
             client2.connect(MQTT_SVR_Add, MQTT_SVR_Port)
             client2.publish(str(o_TMP_QueueItem[0]), str(o_TMP_QueueItem[1]))
             time.sleep(0.2)
