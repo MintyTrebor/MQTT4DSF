@@ -10,11 +10,11 @@ Currently it can:
     broker of choice
  2. Poll DSF on a frequency and send mqtt msgs based on a value delta
     (user configurable)
- 3. Send MQTT msgs when specially formatted msgs are recieved from DSF.
+ 3. Send MQTT msgs when specially formatted msgs are recieved from DSF (via M117).
 
 This has only been tested on a raspberry pi running DSF from [https://github.com/gloomyandy/RepRapFirmware/wiki](https://github.com/gloomyandy/RepRapFirmware/wiki)
 
-Note: Much of DSFMQTT is dependant on Beta versions of DSF settings and therefore much of this code is subject to change as things develop. There is very little guidance on best practice for using and deploying code dependant on DSF so best efforts have been made to make sensible choices. 
+Note: Much of DSFMQTT is dependant on Beta versions of DSF, and therefore much of this code is subject to change as things develop. There is very little guidance on best practice for using and deploying code dependant on DSF so best efforts have been made to make sensible choices. 
 
 # Installation
 
