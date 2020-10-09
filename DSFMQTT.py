@@ -323,8 +323,8 @@ def checkDSF():
             #if we get this far dsf is backup so return with OK
             sub_conn.close()
             sub_conn = None
-            return "OK"
             logging.info(str("CheckDSF has recovered"))
+            return "OK"
         except Exception as ex:
             sub_conn = None
             reload(pydsfapi)
@@ -396,98 +396,98 @@ def processDSFEventQueue():
     global str_TMP_Filter
     global config_json
 
-    #try:
-    while True:
-        #get next update from the queue
-        j_patch = q_DSF_Updates.get()
-        try:
-            j_latest = json.loads(j_patch)
-        except Exception as ex:
-            continue
+    try:
+        while True:
+            #get next update from the queue
+            j_patch = q_DSF_Updates.get()
+            try:
+                j_latest = json.loads(j_patch)
+            except:
+                continue
 
-        #for each subscription update event iterate through all MQTT_MESSAGES in config and identify matches
-        for j_AllMsgs in config_json["MQTT_MESSAGES"]:
-            #Get MSG Type
-            s_TMP_MsgType = str(j_AllMsgs["Type"])
-            s_TMP_Enabled = str(j_AllMsgs["Enabled"])
-            b_IsCMD = False
-            #check for MQTT_CMD_MSGS
-            if s_TMP_MsgType == "MSG":
-                s_TMP_CMD_MsgVal = getMSGCMDFromKeys(j_latest, j_AllMsgs["DSF_DOM_Filter"])
-                if s_TMP_CMD_MsgVal != "NOTCMD" and s_TMP_CMD_MsgVal != "CMDRESPONSE":
-                    #this is a cmd msg
-                    b_IsCMD = True
-                    processCMDMsg(s_TMP_CMD_MsgVal)
-                elif s_TMP_CMD_MsgVal == "CMDRESPONSE":
-                    #This is the response sent to the machine from DSFMQTT after it has processed a m177 cmd so no further action is required
-                    b_IsCMD = True
-                else:
-                    b_IsCMD = False
-            #check if this is enabled and its not a MQTTCMD MSG : if not then skip
-            if s_TMP_Enabled == "Y" and b_IsCMD == False:
-                for j_Msg in j_AllMsgs["Msgs"]:
-                    # get the mqtt parameters first
-                    s_TMP_Topic = j_Msg["MQTT_Topic_Path"]
-                    s_TMP_Topic = s_TMP_Topic.replace(str(RepStr_MachineName), str(s_MachineName))
-                    s_TMP_MsgText = j_Msg["MQTT_Topic_MSG"]
-                    # get the variables to check in the subscription update json from DSF
-                    b_Match_Found = False
-                    b_SndMsg = False
-                    for j_Variables in j_AllMsgs["JSON_Variables"]:
-                        s_TMP_Variable = j_Variables["Variable"]
-                        s_TMP_Replace_String = j_Variables["Replace_String"]
-                        s_TMP_Var_Type = j_Variables["Var_Type"]
-                        s_TMP_LastVal = j_Variables["lastval"]
-                        i_TMP_Delta = j_Variables["Msg_Delta"]
-                        s_TMP_Val = getValFromKeys(j_latest, s_TMP_Variable)
-                        if len(str(s_TMP_Val)) > 0 and str(s_TMP_Val) != "None":
-                            #We Have a Match so lets process & update the values and msg text
-                            #see if we should based on delta settings - if curr val is greater than delta from last val then snd msg
-                            s_TMP_DSF_Val = s_TMP_Val
-                            if str(s_TMP_LastVal) != "noLast" and s_TMP_Var_Type != "string":
-                                if int(i_TMP_Delta) != 0:
-                                    #deal with positive or negative deltas
-                                    i_TMP_Val = int(s_TMP_Val) - int(s_TMP_LastVal)
-                                    if i_TMP_Val > 0:
-                                        b_GoPos = True
-                                        i_TMP_Val = int(s_TMP_LastVal) + int(i_TMP_Delta)
+            #for each subscription update event iterate through all MQTT_MESSAGES in config and identify matches
+            for j_AllMsgs in config_json["MQTT_MESSAGES"]:
+                #Get MSG Type
+                s_TMP_MsgType = str(j_AllMsgs["Type"])
+                s_TMP_Enabled = str(j_AllMsgs["Enabled"])
+                b_IsCMD = False
+                #check for MQTT_CMD_MSGS
+                if s_TMP_MsgType == "MSG":
+                    s_TMP_CMD_MsgVal = getMSGCMDFromKeys(j_latest, j_AllMsgs["DSF_DOM_Filter"])
+                    if s_TMP_CMD_MsgVal != "NOTCMD" and s_TMP_CMD_MsgVal != "CMDRESPONSE":
+                        #this is a cmd msg
+                        b_IsCMD = True
+                        processCMDMsg(s_TMP_CMD_MsgVal)
+                    elif s_TMP_CMD_MsgVal == "CMDRESPONSE":
+                        #This is the response sent to the machine from DSFMQTT after it has processed a m177 cmd so no further action is required
+                        b_IsCMD = True
+                    else:
+                        b_IsCMD = False
+                #check if this is enabled and its not a MQTTCMD MSG : if not then skip
+                if s_TMP_Enabled == "Y" and b_IsCMD == False:
+                    for j_Msg in j_AllMsgs["Msgs"]:
+                        # get the mqtt parameters first
+                        s_TMP_Topic = j_Msg["MQTT_Topic_Path"]
+                        s_TMP_Topic = s_TMP_Topic.replace(str(RepStr_MachineName), str(s_MachineName))
+                        s_TMP_MsgText = j_Msg["MQTT_Topic_MSG"]
+                        # get the variables to check in the subscription update json from DSF
+                        b_Match_Found = False
+                        b_SndMsg = False
+                        for j_Variables in j_AllMsgs["JSON_Variables"]:
+                            s_TMP_Variable = j_Variables["Variable"]
+                            s_TMP_Replace_String = j_Variables["Replace_String"]
+                            s_TMP_Var_Type = j_Variables["Var_Type"]
+                            s_TMP_LastVal = j_Variables["lastval"]
+                            i_TMP_Delta = j_Variables["Msg_Delta"]
+                            s_TMP_Val = getValFromKeys(j_latest, s_TMP_Variable)
+                            if len(str(s_TMP_Val)) > 0 and str(s_TMP_Val) != "None":
+                                #We Have a Match so lets process & update the values and msg text
+                                #see if we should based on delta settings - if curr val is greater than delta from last val then snd msg
+                                s_TMP_DSF_Val = s_TMP_Val
+                                if str(s_TMP_LastVal) != "noLast" and s_TMP_Var_Type != "string":
+                                    if int(i_TMP_Delta) != 0:
+                                        #deal with positive or negative deltas
+                                        i_TMP_Val = int(s_TMP_Val) - int(s_TMP_LastVal)
+                                        if i_TMP_Val > 0:
+                                            b_GoPos = True
+                                            i_TMP_Val = int(s_TMP_LastVal) + int(i_TMP_Delta)
+                                        else:
+                                            b_GoPos = False
+                                            i_TMP_Val = int(s_TMP_LastVal) - int(i_TMP_Delta)                                          
+                                        if b_GoPos == True and b_SndMsg ==False:
+                                            if int(s_TMP_Val) >= i_TMP_Val:
+                                                b_SndMsg = True                                        
+                                        if b_GoPos == False and b_SndMsg ==False:
+                                            if int(s_TMP_Val) <= i_TMP_Val:
+                                                b_SndMsg = True
                                     else:
-                                        b_GoPos = False
-                                        i_TMP_Val = int(s_TMP_LastVal) - int(i_TMP_Delta)                                          
-                                    if b_GoPos == True and b_SndMsg ==False:
-                                        if int(s_TMP_Val) >= i_TMP_Val:
-                                            b_SndMsg = True                                        
-                                    if b_GoPos == False and b_SndMsg ==False:
-                                        if int(s_TMP_Val) <= i_TMP_Val:
-                                            b_SndMsg = True
+                                        b_SndMsg = True
                                 else:
                                     b_SndMsg = True
+                                #check for special processing requirements (msgType)
+                                if s_TMP_MsgType == "DSF":
+                                    #This msg needs special formatting
+                                    s_TMP_Val = processDSFMsgs(str(s_TMP_Val))
+                                if s_TMP_Var_Type == "time":
+                                    #The value needs formatting into time
+                                    s_TMP_Val = time.strftime("%H:%M:%S", time.gmtime(int(s_TMP_Val)))
+                                s_TMP_MsgText = s_TMP_MsgText.replace(str(s_TMP_Replace_String), str(s_TMP_Val))
+                                b_Match_Found = True
                             else:
-                                b_SndMsg = True
-                            #check for special processing requirements (msgType)
-                            if s_TMP_MsgType == "DSF":
-                                #This msg needs special formatting
-                                s_TMP_Val = processDSFMsgs(str(s_TMP_Val))
-                            if s_TMP_Var_Type == "time":
-                                #The value needs formatting into time
-                                s_TMP_Val = time.strftime("%H:%M:%S", time.gmtime(int(s_TMP_Val)))
-                            s_TMP_MsgText = s_TMP_MsgText.replace(str(s_TMP_Replace_String), str(s_TMP_Val))
-                            b_Match_Found = True
-                        else:
-                            # If null just remove replace string from msg with NULL so we no no value was provided from the dom
-                            s_TMP_MsgText = s_TMP_MsgText.replace(str(s_TMP_Replace_String), str("NULL"))
-                        if b_SndMsg == True: 
-                            # We are going to snd a msg so update lastval
-                            if s_TMP_Var_Type != "string":
-                                j_Variables["lastval"] = int(s_TMP_DSF_Val)
-                            else:
-                                j_Variables["lastval"] = str(s_TMP_DSF_Val)
-                    if b_Match_Found == True and b_SndMsg == True:
-                        s_TMP_MsgText = s_TMP_MsgText.replace(str(RepStr_MachineName),str(s_MachineName))
-                        addToSndMsgQueue(str(s_TMP_Topic), str(s_TMP_MsgText))
+                                # If null just remove replace string from msg with NULL so we no no value was provided from the dom
+                                s_TMP_MsgText = s_TMP_MsgText.replace(str(s_TMP_Replace_String), str("NULL"))
+                            if b_SndMsg == True: 
+                                # We are going to snd a msg so update lastval
+                                if s_TMP_Var_Type != "string":
+                                    j_Variables["lastval"] = int(s_TMP_DSF_Val)
+                                else:
+                                    j_Variables["lastval"] = str(s_TMP_DSF_Val)
+                        if b_Match_Found == True and b_SndMsg == True:
+                            s_TMP_MsgText = s_TMP_MsgText.replace(str(RepStr_MachineName),str(s_MachineName))
+                            addToSndMsgQueue(str(s_TMP_Topic), str(s_TMP_MsgText))
 
-    #except Exception as ex:
-    #    return(DSFMQTT_ErrHandler(str("Err In processDSFEventQueue: "+ str(ex))))
+    except Exception as ex:
+        return(DSFMQTT_ErrHandler(str("Err In processDSFEventQueue: "+ str(ex))))
                             
 # function that does the main job of polling DSF for updates based on defined polling frequency
 def timedMonitoring():
