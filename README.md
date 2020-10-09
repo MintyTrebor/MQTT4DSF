@@ -118,7 +118,7 @@ Polling msgs are best used for monitoring values that rapidly/frequently change.
 
 The MONITORED_MQTT_MSGS configuration settings are very similar to Event based msgs, with the following changes:
 
- - "JSON_Variables/DSF_DOM_Path"  is used to define the path to the DSF Object Modelvariable(s) excluding the variable name.
+ - "JSON_Variables/DSF_DOM_Path"  is used to define the path to the DSF Object Model variable(s) excluding the variable name.
  - "JSON_Variables/Variables/Variable" defines the DSF Object Model variable name
  - "JSON_Variables/Variables/Instance" allows control over which array item should be assigned.
 
