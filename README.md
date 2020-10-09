@@ -20,7 +20,7 @@ Note: Much of DSFMQTT is dependant on Beta versions of DSF settings and therefor
 
 DSFMQTT requires Python 3, the python paho.mqtt.client, and the DSF dsfpiapi [plugin](https://github.com/Duet3D/DSF-APIs)
 
-Please refer to the other_setup_steps.txt for an example of how to install all of the dependencies.
+Please refer to the [other_setup_steps.txt](https://github.com/MintyTrebor/DSFMQTT/blob/main/other_setup_steps.txt) for an example of how to install all of the dependencies.
 
 Once the dependencies are installed and running, run the following command from your home folder :
 
@@ -77,4 +77,4 @@ Note : Secure MQTT is in testing!
 -In "GENERAL SETTINGS" update "MACHINE_NAME" to your machine name. Other "GENERAL_SETTINGS" can be updated as required, but the standard settings should work for most cases.
 
 ***DSF Event based mqtt messages***
-
+more to come!
