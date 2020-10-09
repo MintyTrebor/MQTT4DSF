@@ -8,7 +8,11 @@
     "GENERAL_SETTINGS" :{
         "PollFrequencySeconds" : 5,
         "MQTT_MSG_CMD_Prefix" : "MQTTCMD:",
-        "MQTT_MSG_CMD_RESPONSE" : "DSFMQTT has actioned the command"
+        "MQTT_MSG_CMD_RESPONSE" : "DSFMQTT has actioned the command",
+        "MQTT_MSG_QUEUE_SIZE" : 200,
+        "DSF_UPDATE_QUEUE_SIZE" : 200,
+        "HTTP_DSF_REQ_ADD" : "http://localhost/machine/status",
+        "MACHINE_NAME" : "MK2sRRF"
     },
     "SYS_SETTINGS" : {
         "WARNING" : "Do Not Change anything in SYS_SETTINGS",
