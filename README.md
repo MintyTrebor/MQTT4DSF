@@ -32,10 +32,10 @@ This will deploy DSFMQTT as a service to the DSF plugin directory.
 
 A DSFMQTT_Config.json configuration file will be placed in the DSF SYS folder, which should be accessible through DWC web interface for easy editing. You will need to enter your MQTT broker details in the config file before running the DSFMQTT service - see **Configuration** section below.
 
-Enter `sudo systemctl start DSFMQTT.service` to start DSFMQTT
+Enter `sudo systemctl start DSFMQTT.service` to start DSFMQTT  
 Enter `sudo systemctl stop DSFMQTT.service` to stop DSFMQTT
 
-DSFMQTT has a delayed 30 start to ensure DSF is running after boot of the pi.
+DSFMQTT has a delayed 30sec start to ensure DSF is running after boot of the pi.
 
 After the delayed start, DSFMQTT will send a start-up msg to the Topic ***Duet/Announce*** ( default settings). The msg should look similar to the below:
 
