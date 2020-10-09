@@ -144,7 +144,7 @@
             "JSON_Variables" : [
                 {   
                     "DSF_Variable_Type" : "SINGLE",
-                    "DSF_DOM_Path" : "sensors/analog",
+                    "DSF_DOM_Path" : "job/timesLeft",
                     "Trigger_Msg" : "Y",
                     "Variables" : [                
                         {"Variable" : "file", "instance" : 0, "Replace_String" : "[!*fileTime*!]", "Var_Type" : "time", "Msg_Delta" : 60, "lastval" : "noLast"}
