@@ -64,30 +64,21 @@ except Exception as ex:
 # function to get the values from the keys based on the variable path defined in config jason
 def getValFromKeys(json_object, path):
     
+    #logging.info("GetValFromKeys data: " + str(json_object) + " PATH : " + str(path))
     if type(path) == str:
-        path = path.split("/")
-    if type(path) != list or len(path) == 0:
-        return
-    key = path.pop(0)
-    if len(path) == 0:
-        if key in json_object:
-            try:
-                try:
-                    if len(json_object[key]) == 0:
-                        return "None"
-                except:
-                    return "None"
-                return json_object[key]                
-            except KeyError:
-                return "None"
-        else:
-            return "None"
-    if len(path):
+        d_TMP_Path = path.split("/")
+        j_TMP_JSON = json_object
         try:
-            return getValFromKeys(json_object[key], path)
+            for idx, dsf in enumerate(d_TMP_Path):
+                j_TMP_JSON = j_TMP_JSON[d_TMP_Path[idx]]
+            s_TMP_MSG = str(j_TMP_JSON)  
+            #logging.info("GetValFromKeys val: " + str(s_TMP_MSG))  
+            return s_TMP_MSG
         except KeyError:
+            #logging.info("GetValFromKeys keyerr: " + str(j_TMP_JSON))  
             return "None"
-
+    else:
+        return "None"
 
 def getValFromArray(json_object, s_Variable, i_instance, s_DSF_DOM_Path):
     s_TMP_Path = s_DSF_DOM_Path
@@ -146,6 +137,10 @@ def DSFEventMonitor():
 
 
         subscribe_connection3 = pydsfapi.SubscribeConnection(SubscriptionMode.PATCH, str_TMP_Filter, debug=False)
+        subscribe_connection3.connect()
+        #get the first msg and discard
+        j_DSFEventMsg = subscribe_connection3.get_machine_model_patch()
+        j_DSFEventMsg = ""
         subscribe_connection3.connect()
 
         while True:            
@@ -309,6 +304,8 @@ def DSFMQTT_ErrHandler(errMsg):
         return "32"
     if errMsg == "Err In DSFEventMonitor: Extra data: line 1 column 17 (char 16)":
         return "32"
+    if errMsg == "Err In timedMonitoring: list indices must be integers or slices, not str":
+        return "32"
     else:
         constructSystemMsg("SysMsg", str(" Err: " + str(errMsg) + ". DSFMQTT will attempt auto recovery"))
         return "32"
@@ -378,11 +375,7 @@ def getInitialInfo():
             j_machine_model = json.loads(s_machine_model.text)
             s_machine_model = None
 
-            #Get machine Name and set it globally
-            #s_MachineName = str(j_machine_model["network"]["name"])
-            #if s_MachineName == "":
-            #    s_MachineName = "Unknown"
-            
+
             #Get Machine Details - (Always get first instances)
             s_Machine_IP = str(j_machine_model["network"]["interfaces"][0]["actualIP"])
             s_Machine_DSF_Ver = str(j_machine_model["state"]["dsfVersion"])
