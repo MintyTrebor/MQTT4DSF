@@ -15,7 +15,7 @@ from importlib import reload
 from queue import Queue 
 
 #setup logging:
-logging.basicConfig(filename='DSFMQTT.log',
+logging.basicConfig(filename='/var/log/DSFMQTT.log',
                             filemode='a',
                             format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
                             datefmt='%H:%M:%S',
@@ -39,7 +39,7 @@ try:
         # Setup MQTT Client Connection
         MQTT_SVR_Port = int(MQTT_SVR_Port)
         client = mqtt.Client(str(MQTT_Client_Name))
-        client.connect(MQTT_SVR_Add,MQTT_SVR_Port,60)
+        client.connect(MQTT_SVR_Add,MQTT_SVR_Port)
 
         # Get Fixed Sys Variables and paramters from the config json
         RepStr_MachineName = config_json["SYS_SETTINGS"]["Default_Replace_Strings"]["Machine_Name"]
@@ -116,12 +116,13 @@ def addToSndMsgQueue(s_FullMsgTopic, s_FullMsgTxt):
 # This function will monitor the MQTT MSG Queue and snd msgs to the broker - requires a thread
 def MsgQueueMonitor():
     global q_MQTT_MSG
-    global client
     try:
-        client.connect(MQTT_SVR_Add, MQTT_SVR_Port)
+        client2 = mqtt.Client(str(MQTT_Client_Name))
         while True:
             o_TMP_QueueItem = q_MQTT_MSG.get()
-            client.publish(str(o_TMP_QueueItem[0]), str(o_TMP_QueueItem[1]))
+            logging.info("About to send : " + str(o_TMP_QueueItem[1]) + " To : " + str(o_TMP_QueueItem[0]))
+            client2.connect(MQTT_SVR_Add, MQTT_SVR_Port)
+            client2.publish(str(o_TMP_QueueItem[0]), str(o_TMP_QueueItem[1]))
             time.sleep(0.2)
     except:
         return("32")
@@ -142,18 +143,22 @@ def DSFEventMonitor():
         #get the filter string
         str_TMP_Filter = constructFilter()
 
+
+
         subscribe_connection3 = pydsfapi.SubscribeConnection(SubscriptionMode.PATCH, str_TMP_Filter, debug=False)
         subscribe_connection3.connect()
 
         while True:            
-            #while True: #subscribe_connection3.get_machine_model_patch():
-            j_DSFEventMsg = subscribe_connection3.get_machine_model_patch()
-            q_DSF_Updates.put(j_DSFEventMsg)
-            #subscribe_connection3.connect()
+            while subscribe_connection3.get_machine_model_patch():
+                j_DSFEventMsg = subscribe_connection3.get_machine_model_patch()
+                #print("Event : "+ str(j_DSFEventMsg))
+                q_DSF_Updates.put(j_DSFEventMsg)
+                subscribe_connection3.connect()
 
     except Exception as ex:
         subscribe_connection3.close()
-        return(DSFMQTT_ErrHandler(str("Err In DSFEventMonitor: "+ str(ex))))
+        logging.error("DSF Event Monitor Error : " + str(ex))
+        return(DSFMQTT_ErrHandler(str("Err In DSFEventMonitor: " + str(ex))))
 
 
 # Function to send System Messages - Should only be called internally
@@ -322,9 +327,12 @@ def checkDSF():
             sub_conn.close()
             sub_conn = None
             return "OK"
-        except:
+            logging.info(str("CheckDSF has recovered"))
+        except Exception as ex:
             sub_conn = None
             reload(pydsfapi)
+            logging.error("CheckDSF err: " + str(ex))
+            logging.warning(str("CheckDSF has failed to recover: retrying in 5 seconds"))
             return "32"
 
 
@@ -606,3 +614,5 @@ while str_RetCode == "32":
 Thread(target = daemon_one).start()
 Thread(target = daemon_two).start()
 Thread(target = daemon_three).start()
+
+
