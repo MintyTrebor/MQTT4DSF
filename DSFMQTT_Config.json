@@ -3,7 +3,9 @@
         "Note" : "Change these to your MQTT Msg Brokers values",
         "MQTT_SVR_ADD" : "10.66.1.51",
         "MQTT_SVR_PORT" : 1883,
-        "MQTT_Client_Name" : "DSFMQTT"
+        "MQTT_Client_Name" : "DSFMQTT",
+        "MQTT_UserName" : "YourUsrNm",
+        "MQTT_Password" : "YourPassword"
     },
     "GENERAL_SETTINGS" :{
         "PollFrequencySeconds" : 5,
