@@ -28,7 +28,7 @@ Once the dependencies are installed and running, run the following command from 
 
     sudo wget -O - https://github.com/MintyTrebor/DSFMQTT/releases/download/v0.02-ALPHA/Install_DSFMQTT.sh | bash
 
-This will deploy DSFMQTT as a service to the DSF plugin directory.
+This will deploy DSFMQTT as a service to the DSF plugin directory. You should review the script before running to ensure you are happy with the approach.
 
 A DSFMQTT_Config.json configuration file will be placed in the DSF SYS folder, which should be accessible through DWC web interface for easy editing. You will need to enter your MQTT broker details in the config file before running the DSFMQTT service - see **Configuration** section below.
 
@@ -65,10 +65,10 @@ To see DSFMQTT system msgs you can also use:
 
 A standard log file is located in /var/log/DSFMQTT.log
 
-# Configuration
+# Configuration  
 All configuration is done through DSFMQTT_Config.json which is accessible via the SYS folder of DWC. Currently when you make any changes you will need to restart the DSFMQTT service.
 
-***Initial Configuration***
+***Initial Configuration***  
 -Update "MQTT_SETTINGS" with your MQTT broker settings:
 
     "MQTT_SVR_ADD" : "10.66.1.51",
@@ -81,7 +81,7 @@ All configuration is done through DSFMQTT_Config.json which is accessible via th
 In "GENERAL SETTINGS" update "MACHINE_NAME" to your machine/printer name. 
 Other "GENERAL_SETTINGS" can be updated as required, but the standard settings should work in most cases.
 
-***DSF Event based mqtt messages***
+***DSF Event based mqtt messages***  
 This class of msg is "pushed" to DSFMQTT from the DSF Service via the API, configured in the "MQTT_MESSAGES" section of the DSFMQTT_Config.json.
 
     {
@@ -111,7 +111,7 @@ This class of msg is "pushed" to DSFMQTT from the DSF Service via the API, confi
  - "Msgs" are where the MQTT Topic and Msg Text are defined. See the example above for reference. Note how the "JSON_Variables/Variable/Replace_String" value is used to define where the value will go in the msg. 
  - [!*MachineName*!] is a system variable which can be used anywhere in MQTT Topic and Msg Text.
 
-**DSF Polling based monitored mqtt messages**
+**DSF Polling based monitored mqtt messages**  
 This class of msg relies on DSFMQTT asking for an update from DSF, it operates using an api method which is different to the Event type msgs. The polling frequency is defined by GENERAL_SETTINGS/PollFrequencySeconds in DSFMQTT_Config.json.
 
 Polling msgs are best used for monitoring values that rapidly/frequently change. They can also be used for groups/arrays of values from the Object Model.
@@ -124,7 +124,7 @@ The MONITORED_MQTT_MSGS configuration settings are very similar to Event based m
 
 Please see DSFMQTT_Config.json for working examples.
 
-**COMMAND MSGS**
+**COMMAND MSGS**  
 Sending a specially formatted M177 command to the machine through gcode or the DWC can trigger customisable mqtt messages to be sent. This can be useful for triggering events outside of DWC via an existing automation solution.
 
 Two examples are included in the default DSFMQTT_Config.json, which can be triggered by sending:
