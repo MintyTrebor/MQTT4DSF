@@ -1,4 +1,4 @@
-sudo wget -O DSFMQTT.tar.gz 'https://github.com/MintyTrebor/DSFMQTT/releases/download/v0.01-ALPHA/DSFMQTT.tar.gz'
+sudo wget -O DSFMQTT.tar.gz 'https://github.com/MintyTrebor/DSFMQTT/releases/download/v0.03-ALPHA/DSFMQTT.tar.gz'
 
 sudo chmod a+rwx DSFMQTT.tar.gz
 
