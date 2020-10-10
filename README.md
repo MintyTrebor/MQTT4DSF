@@ -14,7 +14,7 @@ Currently it can:
 
 This has only been tested on a raspberry pi running DSF from [https://github.com/gloomyandy/RepRapFirmware/wiki](https://github.com/gloomyandy/RepRapFirmware/wiki)
 
-Note: Currently DSFMQTT is dependant on Beta versions of DSF, and therefore much of this code is subject to change as things develop. Best efforts have been made, but much further optimisation is required. **Currently DSFMQTT has been tested on -DSF FW Ver: 3.2.0-beta2 -Board FW Ver: 3.2-beta2. **
+Note: Currently DSFMQTT is dependant on Beta versions of DSF, and therefore much of this code is subject to change as things develop. Best efforts have been made, but much further optimisation is required. **Currently DSFMQTT has been tested on -DSF FW Ver: 3.2.0-beta2 -Board FW Ver: 3.2-beta2. However it should work with any 3+ version according to the pydsfapi plugin** 
 
 # Installation
 
