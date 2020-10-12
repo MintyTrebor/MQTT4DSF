@@ -8,6 +8,7 @@ tar xvzf DSF-APIs-pydsfapi-v3.1.1.tar.gz
 sudo python3 DSF-APIs-pydsfapi-v3.1.1/pydsfapi/setup.py install
 
 sudo pip3 install paho-mqtt
+sudo pip3 install watchdog
 
 
 
