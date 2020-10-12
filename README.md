@@ -2,7 +2,7 @@
 **A Python script/service to send MQTT msgs from a SBC running Duet DSF. Uses the DSF pydsfapi plugin.**
 
 This is a python script/service which interfaces with the DFS Python API to enable the DSF system to send Msgs to an MQTT broker.
-It is currently in very early stages, and relies on editing a json file via the DWC interface to configure the script.
+It is currently in very early stages, and relies on editing a json file via the DWC interface to configure.
 
 Currently it can:
 
