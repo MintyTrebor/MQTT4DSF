@@ -1,7 +1,7 @@
 # DSFMQTT
-**A Python script to send MQTT msgs from a SBC running Duet DSF. Uses the DSF pydsfapi plugin.**
+**A Python script/service to send MQTT msgs from a SBC running Duet DSF. Uses the DSF pydsfapi plugin.**
 
-This is a python script which interfaces with the DFS Python API to enable the DSF system to send Msgs to an MQTT broker.
+This is a python script/service which interfaces with the DFS Python API to enable the DSF system to send Msgs to an MQTT broker.
 It is currently in very early stages, and relies on editing a json file via the DWC interface to configure the script.
 
 Currently it can:
@@ -10,7 +10,7 @@ Currently it can:
     broker of choice
  2. Poll DSF on a frequency and send mqtt msgs based on a value delta
     (user configurable)
- 3. Send MQTT msgs when specially formatted msgs are recieved from DSF (via M117).
+ 3. Send MQTT msgs when specially formatted msgs are recieved from DSF (via M117).  
 
 This has only been tested on a raspberry pi running DSF from [https://github.com/gloomyandy/RepRapFirmware/wiki](https://github.com/gloomyandy/RepRapFirmware/wiki)
 
