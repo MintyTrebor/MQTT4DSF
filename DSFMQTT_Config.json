@@ -14,7 +14,10 @@
         "MQTT_MSG_QUEUE_SIZE" : 200,
         "DSF_UPDATE_QUEUE_SIZE" : 200,
         "HTTP_DSF_REQ_ADD" : "http://localhost/machine/status",
-        "MACHINE_NAME" : "MK2sRRF"
+        "MACHINE_NAME" : "MK2sRRF",
+        "DSFMQTT_SYSTEM_LOGGING_LEVEL" : "DEBUG",
+        "ENABLE_DFSMQTT_GCODE_PROXY" : "Y",
+        "DSFMQTT_GCODE_PROXY_TOPIC" : "Duet/[!*MachineName*!]/gcode"
     },
     "SYS_SETTINGS" : {
         "WARNING" : "Do Not Change anything in SYS_SETTINGS",
@@ -144,7 +147,7 @@
             "JSON_Variables" : [
                 {   
                     "DSF_Variable_Type" : "SINGLE",
-                    "DSF_DOM_Path" : "job/timesLeft",
+                    "DSF_DOM_Path" : "sensors/analog",
                     "Trigger_Msg" : "Y",
                     "Variables" : [                
                         {"Variable" : "file", "instance" : 0, "Replace_String" : "[!*fileTime*!]", "Var_Type" : "time", "Msg_Delta" : 60, "lastval" : "noLast"}
