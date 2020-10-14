@@ -15,10 +15,16 @@ Currently it can:
 
 This has only been tested on a raspberry pi running DSF from [https://github.com/gloomyandy/RepRapFirmware/wiki](https://github.com/gloomyandy/RepRapFirmware/wiki)
 
-Note: Currently MQTT4DSF is dependant on Beta versions of DSF, and therefore much of this code is subject to change as things develop. Best efforts have been made, but much further optimisation is required. **MQTT4DSF has been tested on -DSF FW Ver: 3.2.0-beta2 -Board FW Ver: 3.2-beta2. However it should work with any 3.1+ version according to the pydsfapi plugin** 
+Note: Currently MQTT4DSF is dependant on Beta versions of DSF, and therefore much of this code is subject to change as things develop. Best efforts have been made, but much further optimisation is required. **MQTT4DSF has been tested on -DSF FW Ver: 3.2.0-beta2 -Board FW Ver: 3.2-beta2. However it should work with any 3.1+ version according to the pydsfapi plugin**   
 
-# Installation
+# Background and use-case  
+I decided to put this together after a converstaion about MQTT with DUET-DSF over on discord (plus it was an excuse for me to cut my teeth on Python)! MQTT4DSF is designed to be used as a mechinism to integrate DSF with automation applications and other MQTT based services (like dashboards). This can be useful for controlling external devices based on stateful events from DSF, building multifunction dashboards for multiple machines (eg print farms), and creating rule based event handling. Some examples include:  
+	Turning off printer power after xx time has elapsed since completing print.  
+	Turn off heaters if printer has been left idle for longer than xx (eg during a forgotton pause event).  
+	Creating multi-machine dashboards with collective status and alerts.  
+	Sending emails, or msgs va telegram when a specified event happens.  
 
+# Installation  
 MQTT4DSF requires Python 3, the python paho.mqtt.client, and the DSF dsfpiapi [plugin](https://github.com/Duet3D/DSF-APIs)
 
 It has been developed and tested on rPi 3 & 4.
@@ -136,5 +142,13 @@ Two examples are included in the default MQTT4DSF_Config.json, which can be trig
 The "MQTT_MSG_CMDS" section the the MQTT4DSF_Config.json are where these messages can be configured.
 
 You may choose to alter the command identifier by changing the value of GENERAL_SETTINGS/MQTT_MSG_CMD_Prefix in MQTT4DSF_Config.json.
+  
+**GCode Proxy Service**  
+The GCode proxy service subscibes to an MQTT topic and passes any msgs recieved onto the DSF API for execution on the machine.  
+The GCode proxy service can be enabled/disabled with the config parameter "ENABLE_MQTT4DSF_GCODE_PROXY" : "Y" or "N"  
+The MQTT topic can be specified with the config paramter "MQTT4DSF_GCODE_PROXY_TOPIC" : "Duet/[!*MachineName*!]/gcode" (default)
+Depending on your MQTT Broker configuration you may also have to configure the topic within the broker.  
 
+**Small Note**  
+This is my first Python project so I am sure there is stuff which can be improved within the code...If you have any suggestions they will be welcome. This is a spare time project so updates will not follow a regular schedule. I would like to add a GUI to DWC when the plugin system is finalised.
 
