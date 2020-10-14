@@ -64,7 +64,7 @@ class Settings:
             self.q_DSF_Updates_Size = int(settings["GENERAL_SETTINGS"]["DSF_UPDATE_QUEUE_SIZE"])
             self.s_DSF_HTTP_REQ_URL = str(settings["GENERAL_SETTINGS"]["HTTP_DSF_REQ_ADD"])
             self.s_MachineName = str(settings["GENERAL_SETTINGS"]["MACHINE_NAME"])
-            self.s_Enable_GCode_Proxy = str(settings["GENERAL_SETTINGS"]["ENABLE_DFSMQTT_GCODE_PROXY"])
+            self.s_Enable_GCode_Proxy = str(settings["GENERAL_SETTINGS"]["ENABLE_MQTT4DSF_GCODE_PROXY"])
             self.s_GCode_Proxy_Topic = str(settings["GENERAL_SETTINGS"]["MQTT4DSF_GCODE_PROXY_TOPIC"])
             self.s_MQTT4DSF_Logging_level = str(settings["GENERAL_SETTINGS"]["MQTT4DSF_SYSTEM_LOGGING_LEVEL"])
             self.s_ConfigPath = "/opt/dsf/sd/sys/MQTT4DSF_Config.json"
