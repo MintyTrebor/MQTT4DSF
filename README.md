@@ -1,4 +1,4 @@
-# DSFMQTT
+# MQTT4DSF
 **A Python script/service to send MQTT msgs from a SBC running Duet DSF. Uses the DSF pydsfapi plugin.**
 
 This is a python script/service which interfaces with the DFS Python API to enable the DSF system to send Msgs to an MQTT broker.
@@ -10,39 +10,40 @@ Currently it can:
     broker of choice
  2. Poll DSF on a frequency and send mqtt msgs based on a value delta
     (user configurable)
- 3. Send MQTT msgs when specially formatted msgs are recieved from DSF (via M117).  
+ 3. Send MQTT msgs when specially formatted msgs are recieved from DSF (via M117).
+ 4. Act as MQTT to GCode proxy - passing GCode commands to DSF and executing them on the machine, by subscribing to a custom MQTT topic.
 
 This has only been tested on a raspberry pi running DSF from [https://github.com/gloomyandy/RepRapFirmware/wiki](https://github.com/gloomyandy/RepRapFirmware/wiki)
 
-Note: Currently DSFMQTT is dependant on Beta versions of DSF, and therefore much of this code is subject to change as things develop. Best efforts have been made, but much further optimisation is required. **Currently DSFMQTT has been tested on -DSF FW Ver: 3.2.0-beta2 -Board FW Ver: 3.2-beta2. However it should work with any 3+ version according to the pydsfapi plugin** 
+Note: Currently MQTT4DSF is dependant on Beta versions of DSF, and therefore much of this code is subject to change as things develop. Best efforts have been made, but much further optimisation is required. **MQTT4DSF has been tested on -DSF FW Ver: 3.2.0-beta2 -Board FW Ver: 3.2-beta2. However it should work with any 3.1+ version according to the pydsfapi plugin** 
 
 # Installation
 
-DSFMQTT requires Python 3, the python paho.mqtt.client, and the DSF dsfpiapi [plugin](https://github.com/Duet3D/DSF-APIs)
+MQTT4DSF requires Python 3, the python paho.mqtt.client, and the DSF dsfpiapi [plugin](https://github.com/Duet3D/DSF-APIs)
 
 It has been developed and tested on rPi 3 & 4.
 
-Please refer to the [other_setup_steps.txt](https://github.com/MintyTrebor/DSFMQTT/blob/main/other_setup_steps.txt) for an example of how to install all of the dependencies.
+Please refer to the [other_setup_steps.txt](https://github.com/MintyTrebor/MQTT4DSF/blob/main/other_setup_steps.txt) for an example of how to install all of the dependencies.
 
 Once the dependencies are installed and running, run the following command from your home folder :
 
-    sudo wget -O - https://github.com/MintyTrebor/DSFMQTT/releases/download/v0.03-ALPHA/Install_DSFMQTT.sh | bash
+    sudo wget -O - https://github.com/MintyTrebor/MQTT4DSF/releases/download/v0.04-ALPHA/Setup_MQTT4DSF.sh | bash
 
-This will deploy DSFMQTT as a service to the DSF plugin directory. You should review the script before running to ensure you are happy with the approach.
+This will deploy MQTT4DSF as a service to the DSF plugin directory. You should review the script before running to ensure you are happy with the approach.
 
-A DSFMQTT_Config.json configuration file will be placed in the DSF SYS folder, which should be accessible through DWC web interface for easy editing. You will need to enter your MQTT broker details in the config file before running the DSFMQTT service - see **Configuration** section below.
+A MQTT4DSF_Config.json configuration file will be placed in the DSF SYS folder, which should be accessible through DWC web interface for easy editing. You will need to enter your MQTT broker details in the config file before running the MQTT4DSF service - see **Configuration** section below.
 
-Enter `sudo systemctl start DSFMQTT.service` to start DSFMQTT  
-Enter `sudo systemctl stop DSFMQTT.service` to stop DSFMQTT
+Enter `sudo systemctl start MQTT4DSF.service` to start MQTT4DSF  
+Enter `sudo systemctl stop MQTT4DSF.service` to stop MQTT4DSF
 
-DSFMQTT has a delayed 30sec start to ensure DSF is running after boot of the pi.
+MQTT4DSF has a delayed 30sec start to ensure DSF is running after boot of the pi.
 
-After the delayed start, DSFMQTT will send a start-up msg to the Topic ***Duet/Announce*** ( default settings). The msg should look similar to the below:
+After the delayed start, MQTT4DSF will send a start-up msg to the Topic ***Duet/Announce*** ( default settings). The msg should look similar to the below:
 
     NOW ONLINE:: -Machine: DAFFY -IP: 192.168.3.23 -DSF FW Ver: 3.2.0-beta2 -Board FW Ver: 3.2-beta2
 
 MQTT Broker Topic Config:
-The default DSFMQTT config uses the following topics to send messages:
+The default MQTT4DSF config uses the following topics to send messages:
 
  - Duet/Announce
  - Duet/[!*MachineName*!] 
@@ -55,25 +56,25 @@ The default DSFMQTT config uses the following topics to send messages:
  - Duet/[!*MachineName*!]/dsfmsg
  - Duet/[!*MachineName*!]/displaymsg
 
-The system will automatically replace [!*MachineName*!] with the machine name defined in the DSFMQTT_Config.json settings file. For example: if machine name is ***DAFFY*** then the topic path will be Duet/DAFFY/currtool. 
+The system will automatically replace [!*MachineName*!] with the machine name defined in the MQTT4DSF_Config.json settings file. For example: if machine name is ***DAFFY*** then the topic path will be Duet/DAFFY/currtool. 
 
 
-To see DSFMQTT system msgs you can also use:
+To see MQTT4DSF system msgs you can also use:
 
- - Duet/DSFMQTT/sysmsg 
- - Duet/DSFMQTT/log
+ - Duet/MQTT4DSF/sysmsg 
+ - Duet/MQTT4DSF/log
 
-A standard log file is located in /var/log/DSFMQTT.log
+A standard log file is located in /var/log/MQTT4DSF.log
 
 # Configuration  
-All configuration is done through DSFMQTT_Config.json which is accessible via the SYS folder of DWC. Currently when you make any changes you will need to restart the DSFMQTT service.
+All configuration is done through MQTT4DSF_Config.json which is accessible via the SYS folder of DWC. MQTT4DSF will poll for changes to config and reload settings (once every 10 seconds)
 
 ***Initial Configuration***  
 -Update "MQTT_SETTINGS" with your MQTT broker settings:
 
     "MQTT_SVR_ADD" : "10.66.1.51",
     "MQTT_SVR_PORT" : 1883,
-    "MQTT_Client_Name" : "DSFMQTT",
+    "MQTT_Client_Name" : "MQTT4DSF",
     "MQTT_UserName" : "YourUsrNm",
     "MQTT_Password" : "YourPassword"
 
@@ -82,7 +83,7 @@ In "GENERAL SETTINGS" update "MACHINE_NAME" to your machine/printer name.
 Other "GENERAL_SETTINGS" can be updated as required, but the standard settings should work in most cases.
 
 ***DSF Event based mqtt messages***  
-This class of msg is "pushed" to DSFMQTT from the DSF Service via the API, configured in the "MQTT_MESSAGES" section of the DSFMQTT_Config.json.
+This class of msg is "pushed" to MQTT4DSF from the DSF Service via the API, configured in the "MQTT_MESSAGES" section of the MQTT4DSF_Config.json.
 
     {
 	    "MsgName" : "Machine Status",
@@ -112,7 +113,7 @@ This class of msg is "pushed" to DSFMQTT from the DSF Service via the API, confi
  - [!*MachineName*!] is a system variable which can be used anywhere in MQTT Topic and Msg Text.
 
 **DSF Polling based monitored mqtt messages**  
-This class of msg relies on DSFMQTT asking for an update from DSF, it operates using an api method which is different to the Event type msgs. The polling frequency is defined by GENERAL_SETTINGS/PollFrequencySeconds in DSFMQTT_Config.json.
+This class of msg relies on MQTT4DSF asking for an update from DSF, it operates using an api method which is different to the Event type msgs. The polling frequency is defined by GENERAL_SETTINGS/PollFrequencySeconds in MQTT4DSF_Config.json.
 
 Polling msgs are best used for monitoring values that rapidly/frequently change. They can also be used for groups/arrays of values from the Object Model.
 
@@ -122,18 +123,18 @@ The MONITORED_MQTT_MSGS configuration settings are very similar to Event based m
  - "JSON_Variables/Variables/Variable" defines the DSF Object Model variable name
  - "JSON_Variables/Variables/Instance" allows control over which array item should be assigned.
 
-Please see DSFMQTT_Config.json for working examples.
+Please see MQTT4DSF_Config.json for working examples.
 
 **COMMAND MSGS**  
 Sending a specially formatted M177 command to the machine through gcode or the DWC can trigger customisable mqtt messages to be sent. This can be useful for triggering events outside of DWC via an existing automation solution.
 
-Two examples are included in the default DSFMQTT_Config.json, which can be triggered by sending:
+Two examples are included in the default MQTT4DSF_Config.json, which can be triggered by sending:
 
     M117 "MQTTCMD:Test CMD 1"
     M117 "MQTTCMD:Test CMD 2"
 
-The "MQTT_MSG_CMDS" section the the DSFMQTT_Config.json are where these messages can be configured.
+The "MQTT_MSG_CMDS" section the the MQTT4DSF_Config.json are where these messages can be configured.
 
-You may choose to alter the command identifier by changing the value of GENERAL_SETTINGS/MQTT_MSG_CMD_Prefix in DSFMQTT_Config.json.
+You may choose to alter the command identifier by changing the value of GENERAL_SETTINGS/MQTT_MSG_CMD_Prefix in MQTT4DSF_Config.json.
 
 
