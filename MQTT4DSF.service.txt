@@ -1,0 +1,13 @@
+[Unit]
+Requires=duetcontrolserver.service
+After=duetcontrolservice.service
+Description=MQTT4DSF
+After=multi-user.target
+[Service]
+ExecStartPre=/bin/sleep 30
+WorkingDirectory=/opt/dsf/plugins/MQTT4DSF
+Type=idle
+ExecStart=/usr/bin/python3 /opt/dsf/plugins/MQTT4DSF/MQTT4DSF.py &> /dev/null
+Restart=always
+[Install]
+WantedBy=multi-user.target
