@@ -16,7 +16,7 @@
         "HTTP_DSF_REQ_ADD" : "http://localhost/machine/status",
         "MACHINE_NAME" : "MK2sRRF",
         "MQTT4DSF_SYSTEM_LOGGING_LEVEL" : "WARNING",
-        "ENABLE_DFSMQTT_GCODE_PROXY" : "Y",
+        "ENABLE_MQTT4DSF_GCODE_PROXY" : "Y",
         "MQTT4DSF_GCODE_PROXY_TOPIC" : "Duet/[!*MachineName*!]/gcode"
     },
     "SYS_SETTINGS" : {
