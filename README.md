@@ -50,7 +50,7 @@ After the delayed start, MQTT4DSF will send a start-up msg to the Topic ***Duet/
 
     NOW ONLINE:: -Machine: DAFFY -IP: 192.168.3.23 -DSF FW Ver: 3.2.0-beta2 -Board FW Ver: 3.2-beta2
 
-MQTT Broker Topic Config:
+**MQTT Broker Topic Config:**  
 The default MQTT4DSF config uses the following topics to send messages:
 
  - Duet/Announce
