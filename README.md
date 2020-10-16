@@ -65,15 +65,9 @@ The default MQTT4DSF config uses the following topics to send messages:
  - Duet/[!*MachineName*!]/displaymsg
 
 The system will automatically replace [!*MachineName*!] with the machine name defined in the MQTT4DSF_Config.json settings file. For example: if machine name is ***DAFFY*** then the topic path will be Duet/DAFFY/currtool. 
-
-
-To see MQTT4DSF system msgs you can also use:
-
- - Duet/MQTT4DSF/sysmsg 
- - Duet/MQTT4DSF/log
-
-A standard log file is located in /var/log/MQTT4DSF.log
-
+  
+A log file is located in /var/log/MQTT4DSF.log. The logging level can be changed in MQTT4DSF_Config.json.  
+  
 # Configuration  
 All configuration is done through MQTT4DSF_Config.json which is accessible via the SYS folder of DWC. MQTT4DSF will poll for changes to config and reload settings (once every 10 seconds) which will result in a restart of the service.
 
