@@ -11,7 +11,7 @@ Currently it can:
  3. Send MQTT msgs when specially formatted msgs are recieved from DSF (via M117).  
  4. Act as MQTT to GCode proxy - passing GCode commands to DSF and executing them on the machine, by subscribing to a custom MQTT topic.  
   
-Short video of features in use [here](https://youtu.be/2XwTgxythTE%5D)
+Short video of features in use [here](https://www.youtube.com/watch?v=2XwTgxythTE)
 
 This has only been tested on a raspberry pi running DSF from [https://github.com/gloomyandy/RepRapFirmware/wiki](https://github.com/gloomyandy/RepRapFirmware/wiki)
 
