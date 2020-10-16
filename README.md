@@ -6,12 +6,10 @@ It is currently in very early stages, and relies on editing a json file via the 
 
 Currently it can:
 
- 1. Monitor DSF for events (user configurable) and send mqtt msgs to a
-    broker of choice
- 2. Poll DSF on a frequency and send mqtt msgs based on a value delta
-    (user configurable)
- 3. Send MQTT msgs when specially formatted msgs are recieved from DSF (via M117).
- 4. Act as MQTT to GCode proxy - passing GCode commands to DSF and executing them on the machine, by subscribing to a custom MQTT topic.
+ 1. Capture DSF events (user configurable) and send mqtt msgs to a broker of choice  
+ 2. Poll DSF on a frequency and send mqtt msgs based on a value delta (user configurable)  
+ 3. Send MQTT msgs when specially formatted msgs are recieved from DSF (via M117).  
+ 4. Act as MQTT to GCode proxy - passing GCode commands to DSF and executing them on the machine, by subscribing to a custom MQTT topic.  
 
 This has only been tested on a raspberry pi running DSF from [https://github.com/gloomyandy/RepRapFirmware/wiki](https://github.com/gloomyandy/RepRapFirmware/wiki)
 
@@ -77,7 +75,7 @@ To see MQTT4DSF system msgs you can also use:
 A standard log file is located in /var/log/MQTT4DSF.log
 
 # Configuration  
-All configuration is done through MQTT4DSF_Config.json which is accessible via the SYS folder of DWC. MQTT4DSF will poll for changes to config and reload settings (once every 10 seconds)
+All configuration is done through MQTT4DSF_Config.json which is accessible via the SYS folder of DWC. MQTT4DSF will poll for changes to config and reload settings (once every 10 seconds) which will result in a restart of the service.
 
 ***Initial Configuration***  
 -Update "MQTT_SETTINGS" with your MQTT broker settings:
