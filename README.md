@@ -23,6 +23,9 @@ I decided to put this together after a converstaion about MQTT with DUET-DSF ove
 	Turn off heaters if printer has been left idle for longer than xx (eg during a forgotton pause event).  
 	Creating multi-machine dashboards with collective status and alerts.  
 	Sending emails, or msgs va telegram when a specified event happens.  
+  	  
+# High Level Design Overview  
+![MQTT4DSF](MQTT4DSF.jpg)
 
 # Installation  
 MQTT4DSF requires Python 3, the python paho.mqtt.client, and the DSF dsfpiapi [plugin](https://github.com/Duet3D/DSF-APIs)
