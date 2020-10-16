@@ -36,7 +36,7 @@ Please refer to the [other_setup_steps.txt](https://github.com/MintyTrebor/MQTT4
 
 Once the dependencies are installed and running, run the following command from your home folder :
 
-    sudo wget -O - https://github.com/MintyTrebor/MQTT4DSF/releases/download/v0.04-ALPHA/Setup_MQTT4DSF.sh | bash
+    sudo wget -O - https://github.com/MintyTrebor/MQTT4DSF/releases/download/v0.10-ALPHA/Setup_MQTT4DSF.sh | bash
 
 This will deploy MQTT4DSF as a service to the DSF plugin directory. You should review the script before running to ensure you are happy with the approach.
 
