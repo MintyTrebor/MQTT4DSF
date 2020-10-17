@@ -153,7 +153,7 @@ The "MQTT_MSG_CMDS" section the the MQTT4DSF_Config.json are where these message
 You may choose to alter the command identifier by changing the value of GENERAL_SETTINGS/MQTT_MSG_CMD_Prefix in MQTT4DSF_Config.json.
   
 **GCode Proxy Service**  
-- The GCode proxy service subscibes to an MQTT topic and passes any msgs recieved onto the DSF API for execution on the machine.  
+- The GCode proxy service subscribes to an MQTT topic and passes any msgs received onto the DSF API for execution on the machine.  
 - GCode proxy can be enabled/disabled with the config parameter "ENABLE_MQTT4DSF_GCODE_PROXY" : "Y" or "N"  
 - The MQTT topic can be specified with the config paramter "MQTT4DSF_GCODE_PROXY_TOPIC" : "Duet/[!*MachineName*!]/gcode" (default)  
 - Depending on your MQTT Broker configuration you may also have to configure the topic within the broker.  
