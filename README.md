@@ -153,10 +153,10 @@ The "MQTT_MSG_CMDS" section the the MQTT4DSF_Config.json are where these message
 You may choose to alter the command identifier by changing the value of GENERAL_SETTINGS/MQTT_MSG_CMD_Prefix in MQTT4DSF_Config.json.
   
 **GCode Proxy Service**  
-The GCode proxy service subscibes to an MQTT topic and passes any msgs recieved onto the DSF API for execution on the machine.  
-The GCode proxy service can be enabled/disabled with the config parameter "ENABLE_MQTT4DSF_GCODE_PROXY" : "Y" or "N"  
-The MQTT topic can be specified with the config paramter "MQTT4DSF_GCODE_PROXY_TOPIC" : "Duet/[!*MachineName*!]/gcode" (default)
-Depending on your MQTT Broker configuration you may also have to configure the topic within the broker.  
+- The GCode proxy service subscibes to an MQTT topic and passes any msgs recieved onto the DSF API for execution on the machine.  
+- GCode proxy can be enabled/disabled with the config parameter "ENABLE_MQTT4DSF_GCODE_PROXY" : "Y" or "N"  
+- The MQTT topic can be specified with the config paramter "MQTT4DSF_GCODE_PROXY_TOPIC" : "Duet/[!*MachineName*!]/gcode" (default)  
+- Depending on your MQTT Broker configuration you may also have to configure the topic within the broker.  
 
 **Small Note**  
 This is my first Python project so I am sure there is stuff which can be improved within the code...If you have any suggestions they will be welcome. This is a spare time project so updates will not follow a regular schedule. I would like to add a GUI to DWC when the plugin system is finalised.
