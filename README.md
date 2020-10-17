@@ -1,4 +1,4 @@
-	 # MQTT4DSF
+# MQTT4DSF
 **A Python script/service to send MQTT msgs from a SBC running Duet DSF. Uses the DSF pydsfapi plugin.**
   
 **Currently it can:**  
