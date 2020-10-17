@@ -1,11 +1,11 @@
-# MQTT4DSF
+	 # MQTT4DSF
 **A Python script/service to send MQTT msgs from a SBC running Duet DSF. Uses the DSF pydsfapi plugin.**
   
 **Currently it can:**  
   
- 1. Subscribe to user defined DSF events and send mqtt msgs to a broker of choice on reciept of event (user configurable)
+ 1. Subscribe to user defined DSF events and send mqtt msgs to a broker of choice on receipt of event (user configurable)
  2. Poll DSF on a timed frequency and send mqtt msgs based on a value delta (user configurable)  
- 3. Send user defined MQTT msgs when specially formatted M117 msgs are recieved from DSF events.  
+ 3. Send user defined MQTT msgs when specially formatted M117 msgs are received from DSF events.  
  4. Act as MQTT to GCode proxy - passing GCode commands to DSF and executing them on the machine, by subscribing to a custom MQTT topic.  
   
 Short video of features in use [here](https://www.youtube.com/watch?v=2XwTgxythTE)
@@ -17,7 +17,7 @@ Note: Currently MQTT4DSF is developed using Beta versions of DSF, and therefore 
 **MQTT4DSF has been tested on -DSF FW Ver: 3.2.0-beta2 -Board FW Ver: 3.2-beta2. However it should work with any 3.1.1+ version according to the pydsfapi plugin documentation.   Prior to 3.2 the DSF RestAPI returned a different format of the object model, by prefixing it with 'response'. If you deploy this service on DSF lower than 3.2 you may have to adjust the configuration file to reflect this by changing "MONITORED_MQTT_MSGS/JSON_Variables/DSF_DOM_Path" values. This only applies to "MONITORED_MQTT_MSGS".**   
 
 # Background and use-case  
-I decided to put this together after a converstaion about MQTT with DUET over on [discord](https://discord.gg/fw3Gqpw) (plus it was an excuse for me to cut my teeth on Python)! MQTT4DSF is designed to be used as a mechinism to integrate DSF with automation applications and other MQTT based services (like dashboards). This can be useful for controlling external devices based on machine events from DSF, building multifunction dashboards for multiple machines (eg print farms), and creating rule based event handling. Some examples of use could include:  
+I decided to put this together after a conversation about MQTT with DUET over on [discord](https://discord.gg/fw3Gqpw) (plus it was an excuse for me to cut my teeth on Python)! MQTT4DSF is designed to be used as a mechanism to integrate DSF with automation applications and other MQTT based services (like dashboards). This can be useful for controlling external devices based on machine events from DSF, building multifunction dashboards for multiple machines (eg print farms), and creating rule based event handling. Some examples of use could include:  
 	 - Turning off printer power after xx time has elapsed since completing print.   
 	 - Turn off heaters if printer has been left idle for longer than xx (eg. during a forgotten pause event).  
 	 - Creating multi-machine dashboards with collective status and alerts.  
