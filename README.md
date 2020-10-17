@@ -1,14 +1,11 @@
 # MQTT4DSF
 **A Python script/service to send MQTT msgs from a SBC running Duet DSF. Uses the DSF pydsfapi plugin.**
-
-This is a python script/service which interfaces with the DFS Python API to enable the DSF system to send Msgs to an MQTT broker.
-It is currently in very early stages, and relies on editing a json file via the DWC interface to configure.
-
-Currently it can:
-
- 1. Capture DSF events (user configurable) and send mqtt msgs to a broker of choice  
- 2. Poll DSF on a frequency and send mqtt msgs based on a value delta (user configurable)  
- 3. Send MQTT msgs when specially formatted msgs are recieved from DSF (via M117).  
+  
+**Currently it can:**  
+  
+ 1. Subscribe to user defined DSF events and send mqtt msgs to a broker of choice on reciept of event (user configurable)
+ 2. Poll DSF on a timed frequency and send mqtt msgs based on a value delta (user configurable)  
+ 3. Send user defined MQTT msgs when specially formatted M117 msgs are recieved from DSF events.  
  4. Act as MQTT to GCode proxy - passing GCode commands to DSF and executing them on the machine, by subscribing to a custom MQTT topic.  
   
 Short video of features in use [here](https://www.youtube.com/watch?v=2XwTgxythTE)
@@ -20,11 +17,12 @@ Note: Currently MQTT4DSF is developed using Beta versions of DSF, and therefore 
 **MQTT4DSF has been tested on -DSF FW Ver: 3.2.0-beta2 -Board FW Ver: 3.2-beta2. However it should work with any 3.1.1+ version according to the pydsfapi plugin documentation.   Prior to 3.2 the DSF RestAPI returned a different format of the object model, by prefixing it with 'response'. If you deploy this service on DSF lower than 3.2 you may have to adjust the configuration file to reflect this by changing "MONITORED_MQTT_MSGS/JSON_Variables/DSF_DOM_Path" values. This only applies to "MONITORED_MQTT_MSGS".**   
 
 # Background and use-case  
-I decided to put this together after a converstaion about MQTT with DUET-DSF over on discord (plus it was an excuse for me to cut my teeth on Python)! MQTT4DSF is designed to be used as a mechinism to integrate DSF with automation applications and other MQTT based services (like dashboards). This can be useful for controlling external devices based on stateful events from DSF, building multifunction dashboards for multiple machines (eg print farms), and creating rule based event handling. Some examples include:  
+I decided to put this together after a converstaion about MQTT with DUET over on discord (plus it was an excuse for me to cut my teeth on Python)! MQTT4DSF is designed to be used as a mechinism to integrate DSF with automation applications and other MQTT based services (like dashboards). This can be useful for controlling external devices based on machine events from DSF, building multifunction dashboards for multiple machines (eg print farms), and creating rule based event handling. Some examples of use could include:  
 	Turning off printer power after xx time has elapsed since completing print.  
 	Turn off heaters if printer has been left idle for longer than xx (eg during a forgotton pause event).  
 	Creating multi-machine dashboards with collective status and alerts.  
 	Sending emails, or msgs va telegram when a specified event happens.  
+	Triggering Cameras
   	  
 # High Level Design Overview  
 ![MQTT4DSF](MQTT4DSF.jpg)
@@ -40,9 +38,9 @@ Once the dependencies are installed and running, run the following command from 
 
     sudo wget -O - https://github.com/MintyTrebor/MQTT4DSF/releases/download/v0.10-ALPHA/Setup_MQTT4DSF.sh | bash
 
-This will deploy MQTT4DSF as a service to the DSF plugin directory. You should review the script before running to ensure you are happy with the approach.
+This will deploy MQTT4DSF as a service to the DSF plugin directory. You should review the script before running to ensure you are happy with the approach, or if you wish to deploy manually.
 
-A MQTT4DSF_Config.json configuration file will be placed in the DSF SYS folder, which should be accessible through DWC web interface for easy editing. You will need to enter your MQTT broker details in the config file before running the MQTT4DSF service - see **Configuration** section below.
+A MQTT4DSF_Config.json configuration file will be placed in the DSF SYS folder, which is accessible through DWC web interface for easy editing. You will need to enter your MQTT broker details in the config file before running the MQTT4DSF service - see **Configuration** section below.
 
 Enter `sudo systemctl start MQTT4DSF.service` to start MQTT4DSF  
 Enter `sudo systemctl stop MQTT4DSF.service` to stop MQTT4DSF
@@ -106,17 +104,28 @@ This class of msg is "pushed" to MQTT4DSF from the DSF Service via the API, conf
 			
 
  - "DSF_DOM_Filter"  sets a filter for the DSF event service so that it only pushes updates when the specified value changes. The path should follow the DSF Object Model (which you can browse by activating the Object Model plugin in DWC). The pattern should follow *object/object/variable*. Do not try and filter on objects. If you wish to include more than one variable in the "DSF_DOM_Filter" use *|* as the separator eg  *object/object/variable|object/variable*.
+   
  - "Type" should be set to "STD" for user defined msgs.
+   
  - "Enabled" = "Y"/"N" to enable or disable the msg.
+   
  - "JSON_Variables" are the fields you wish to include in this mqtt msg. 
+   
  - Each "JSON_Variables/Variable" entry allows you to define the value to include in the msg text. Normally this should echo the "DSF_DOM_Filter" path. If you have defined more than one variable in the "DSF_DOM_Filter" path then add as many "JSON_Variables/Variable" entries as required.
+   
  - "JSON_Variables/Variable/Replace_String" allows you specify the string that identifies where the value should be placed in your msg text.
+   
  - "JSON_Variables/Variable/Var_Type" can be one of three values "string", "int", & "time" (normally seconds).
- - "JSON_Variables/Variable/Msg_Delta" sets the value by how much the  "JSON_Variables/Variable" should change before a msg is sent. Set to 0 to ignore (0 should be the default for "JSON_Variables/Variable/Var_Type" = "string")
- - "JSON_Variables/Variable/lastval" must be set to "noLast"
+   
+ - "JSON_Variables/Variable/Msg_Delta" sets the value by how much the  "JSON_Variables/Variable" should change before a msg is sent. Set to 0 to ignore (0 should be the default for "JSON_Variables/Variable/Var_Type" = "string")  
+   
+ - "JSON_Variables/Variable/lastval" must be set to "noLast"  
+   
  - "Msgs" are where the MQTT Topic and Msg Text are defined. See the example above for reference. Note how the "JSON_Variables/Variable/Replace_String" value is used to define where the value will go in the msg. 
- - [!*MachineName*!] is a system variable which can be used anywhere in MQTT Topic and Msg Text.
-
+   
+ - [!*MachineName*!] is a system variable which can be used anywhere in MQTT Topic and Msg Text.  
+ 
+  
 **DSF Polling based monitored mqtt messages**  
 This class of msg relies on MQTT4DSF asking for an update from DSF, it operates using an api method which is different to the Event type msgs. The polling frequency is defined by GENERAL_SETTINGS/PollFrequencySeconds in MQTT4DSF_Config.json.
 
