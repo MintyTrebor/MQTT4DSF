@@ -141,7 +141,7 @@ The MONITORED_MQTT_MSGS configuration settings are very similar to Event based m
 Please see MQTT4DSF_Config.json for working examples.
 
 **COMMAND MSGS**  
-Sending a specially formatted M177 command to the machine through gcode or the DWC can trigger customisable mqtt messages to be sent. This can be useful for triggering events outside of DWC via an existing automation solution.
+Sending a specially formatted M117 command to the machine through gcode or the DWC can trigger customisable mqtt messages to be sent. This can be useful for triggering events outside of DWC via an existing automation solution.
 
 Two examples are included in the default MQTT4DSF_Config.json, which can be triggered by sending:
 
