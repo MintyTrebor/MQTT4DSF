@@ -18,11 +18,12 @@ Note: Currently MQTT4DSF is developed using Beta versions of DSF, and therefore 
 
 # Background and use-case  
 I decided to put this together after a converstaion about MQTT with DUET over on discord (plus it was an excuse for me to cut my teeth on Python)! MQTT4DSF is designed to be used as a mechinism to integrate DSF with automation applications and other MQTT based services (like dashboards). This can be useful for controlling external devices based on machine events from DSF, building multifunction dashboards for multiple machines (eg print farms), and creating rule based event handling. Some examples of use could include:  
-	Turning off printer power after xx time has elapsed since completing print.  
-	Turn off heaters if printer has been left idle for longer than xx (eg during a forgotton pause event).  
-	Creating multi-machine dashboards with collective status and alerts.  
-	Sending emails, or msgs va telegram when a specified event happens.  
-	Triggering Cameras
+	 - Turning off printer power after xx time has elapsed since completing print.   
+	 - Turn off heaters if printer has been left idle for longer than xx (eg. during a forgotten pause event).  
+	 - Creating multi-machine dashboards with collective status and alerts.  
+	 - Sending emails, or msgs via telegram (or other messaging svs) when a specified event happens.  
+	 - Triggering Cameras  
+
   	  
 # High Level Design Overview  
 ![MQTT4DSF](MQTT4DSF.jpg)
