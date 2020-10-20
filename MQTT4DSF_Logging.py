@@ -31,7 +31,7 @@ class MQTTDSF_Logging:
         self._change_logging_level()
 
     def _change_logging_level(self):
-        self.log.warning("Chnaging Log Level to = " + str(self.s_MQTT4DSF_Logging_level))
+        self.log.warning("Changing Log Level to = " + str(self.s_MQTT4DSF_Logging_level))
         if self.s_MQTT4DSF_Logging_level == "DEBUG": self.log.setLevel(logging.DEBUG)
         if self.s_MQTT4DSF_Logging_level == "INFO": self.log.setLevel(logging.INFO)
         if self.s_MQTT4DSF_Logging_level == "CRITICAL": self.log.setLevel(logging.CRITICAL)
