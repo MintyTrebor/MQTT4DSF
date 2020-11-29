@@ -2,9 +2,9 @@ sudo apt-get install python3-pip
 
 sudo pip3 install --upgrade setuptools
 
-wget --no-check-certificate --content-disposition https://github.com/Duet3D/DSF-APIs/archive/pydsfapi/v3.1.1.tar.gz
-tar xvzf DSF-APIs-pydsfapi-v3.1.1.tar.gz
-
-sudo python3 DSF-APIs-pydsfapi-v3.1.1/pydsfapi/setup.py install
+wget --no-check-certificate --content-disposition https://github.com/Duet3D/DSF-APIs/archive/pydsfapi/v3.1.3.tar.gz
+tar xvzf DSF-APIs-pydsfapi-v3.1.3.tar.gz
+cd DSF-APIs-pydsfapi-v3.1.3/pydsfapi
+sudo python3 setup.py install
 
 sudo pip3 install paho-mqtt
