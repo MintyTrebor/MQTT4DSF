@@ -149,8 +149,7 @@
                     "Trigger_Msg" : "Y",
                     "Variables" : [                
                         {"Variable" : "lastReading", "instance" : 0, "Replace_String" : "[!*0LastRead*!]", "Var_Type" : "int", "Msg_Delta" : 2, "lastval" : "noLast"},
-                        {"Variable" : "lastReading", "instance" : 1, "Replace_String" : "[!*1LastRead*!]", "Var_Type" : "int", "Msg_Delta" : 2, "lastval" : "noLast"},
-                        {"Variable" : "lastReading", "instance" : 2, "Replace_String" : "[!*2LastRead*!]", "Var_Type" : "int", "Msg_Delta" : 5, "lastval" : "noLast"}
+                        {"Variable" : "lastReading", "instance" : 1, "Replace_String" : "[!*1LastRead*!]", "Var_Type" : "int", "Msg_Delta" : 2, "lastval" : "noLast"}
                     ]
                 
                 },
@@ -166,7 +165,7 @@
                 }
             ],
             "Msgs" : [
-                {"MQTT_Topic_Path" : "Duet/[!*MachineName*!]/temps", "MQTT_Topic_MSG" : "Bed: [!*0LastRead*!]/[!*0HeatTarg*!] - T0 : [!*1LastRead*!]/[!*1HeatTarg*!] - Chamber : [!*2LastRead*!]"}
+                {"MQTT_Topic_Path" : "Duet/[!*MachineName*!]/temps", "MQTT_Topic_MSG" : "Bed: [!*0LastRead*!]/[!*0HeatTarg*!] - T0 : [!*1LastRead*!]/[!*1HeatTarg*!]"}
             ]
 
         }
