@@ -193,7 +193,7 @@ class MQTT4DSF_PollingMonitor:
                                 s_TMP_MsgText = s_TMP_MsgText.replace(self.RepStr_MachineName, self.s_MachineName)
                                 self.MsgQ.put((str(s_TMP_Topic), str(s_TMP_MsgText)))
                         except Exception as ex:
-                            self.logQ.put(("ERROR", str("MQTT4DSF_PollingMonitor: MSG Name :  " + str(j_AllMsgs["MsgName"]) + "Configuration is invalid. Check config file for this msg's settings. Technical Err: " + str(ex))))
+                            self.logQ.put(("ERROR", str("MQTT4DSF_PollingMonitor: MSG Name :  " + str(j_AllMsgs["MsgName"]) + " : Configuration is invalid. Check config file for this msg's settings. Technical Err: " + str(ex))))
             except Exception as ex:
                 self.logQ.put(("ERROR", str("MQTT4DSF_PollingMonitor _timedMonitoring : " + str(ex))))
             # Polling Delay Here
