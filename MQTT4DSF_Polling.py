@@ -71,18 +71,21 @@ class MQTT4DSF_PollingMonitor:
         # function to get the values from an array on the variable path and instance defined in config json
         s_TMP_Path = s_DSF_DOM_Path
         if type(s_TMP_Path) == str:
-            d_TMP_Path = s_TMP_Path.split("/")
-            j_TMP_JSON = json_object
-            # iterate through the json path
-            for idx, domvar in enumerate(d_TMP_Path):
-                j_TMP_JSON = j_TMP_JSON[d_TMP_Path[idx]]
-            # iterate through the pathed json to get the value required
-            for idx, j_TMP_DSF in enumerate(j_TMP_JSON):
-                if idx == i_instance:
-                    try:
-                        return j_TMP_DSF[s_Variable]
-                    except KeyError:
-                        return "None"    
+            try:
+                d_TMP_Path = s_TMP_Path.split("/")
+                j_TMP_JSON = json_object
+                # iterate through the json path
+                for idx, domvar in enumerate(d_TMP_Path):
+                    j_TMP_JSON = j_TMP_JSON[d_TMP_Path[idx]]
+                # iterate through the pathed json to get the value required
+                for idx, j_TMP_DSF in enumerate(j_TMP_JSON):
+                    if idx == i_instance:
+                        try:
+                            return j_TMP_DSF[s_Variable]
+                        except KeyError:
+                            return "None" 
+            except:
+                return "None"   
         else:
             return "None"
 
