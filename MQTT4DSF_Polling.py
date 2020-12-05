@@ -78,12 +78,18 @@ class MQTT4DSF_PollingMonitor:
                 for idx, domvar in enumerate(d_TMP_Path):
                     j_TMP_JSON = j_TMP_JSON[d_TMP_Path[idx]]
                 # iterate through the pathed json to get the value required
-                for idx, j_TMP_DSF in enumerate(j_TMP_JSON):
-                    if idx == i_instance:
+                try:
+                    for idx, j_TMP_DSF in enumerate(j_TMP_JSON):
                         try:
-                            return j_TMP_DSF[s_Variable]
-                        except KeyError:
-                            return "None" 
+                            if idx == i_instance:
+                                try:
+                                    return j_TMP_DSF[s_Variable]
+                                except KeyError:
+                                    return "None"
+                        except:
+                            continue
+                except:
+                    return "None"             
             except:
                 return "None"   
         else:
