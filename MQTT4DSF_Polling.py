@@ -114,79 +114,86 @@ class MQTT4DSF_PollingMonitor:
                 for j_AllMsgs in self.j_MQTT4DSF_MONMSGS:
                     s_TMP_MsgType = j_AllMsgs["Type"]
                     for j_Msg in j_AllMsgs["Msgs"]:
-                        # get the mqtt parameters first
-                        s_TMP_Topic = j_Msg["MQTT_Topic_Path"]
-                        s_TMP_Topic = s_TMP_Topic.replace(self.RepStr_MachineName, self.s_MachineName)
-                        s_TMP_MsgText = j_Msg["MQTT_Topic_MSG"]
-                        #ensure conditional booleans are re-set for each msg
-                        b_Match_Found = False
-                        b_SndMsg = False
-                        #Iterate through msg variable groups in json config
-                        for j_VarList in j_AllMsgs["JSON_Variables"]:
-                            s_TMP_DSF_Variable_Type = j_VarList["DSF_Variable_Type"]
-                            s_TMP_DSF_DOM_Path = j_VarList["DSF_DOM_Path"]
-                            s_TMP_Trigger_Msg = j_VarList["Trigger_Msg"]
-                            # get the msg variables to evaluate in the subscription update json from DSF
-                            #iterate through in the individual msg variables in the msg variabls group
-                            for j_Variables in j_VarList["Variables"]:
-                                i_TMP_instance = int(j_Variables["instance"])
-                                s_TMP_Variable = j_Variables["Variable"]
-                                s_TMP_Replace_String = j_Variables["Replace_String"]
-                                s_TMP_Var_Type = j_Variables["Var_Type"]
-                                s_TMP_LastVal = j_Variables["lastval"]
-                                i_TMP_Delta = int(j_Variables["Msg_Delta"])
-                                if s_TMP_DSF_Variable_Type == "ARRAY":
-                                    s_TMP_Val = self._getValFromArray(j_machine_model2, s_TMP_Variable, i_TMP_instance, s_TMP_DSF_DOM_Path)
-                                if s_TMP_DSF_Variable_Type == "SINGLE":
-                                    s_TMP_Val = self._getValFromKeys(j_machine_model2, str(str(s_TMP_DSF_DOM_Path) + "/" + str(s_TMP_Variable)))
-                                if len(str(s_TMP_Val)) > 0 and str(s_TMP_Val) != "None":
-                                    #We Have a Match so lets process & update the values and msg text
-                                    #see if we should based on delta settings - if curr val is greater than delta from last val then snd msg
-                                    s_TMP_DSF_Val = s_TMP_Val
-                                    #if Trigger_Msg is set "N" then never trigger a msg from this msg variable - the msg will be triggered by diff variables
-                                    if s_TMP_Trigger_Msg == "Y":
-                                        if str(s_TMP_LastVal) != "noLast" and s_TMP_Var_Type != "string":
-                                            if int(i_TMP_Delta) != 0:
-                                                if b_SndMsg == False:
-                                                    #deal with positive or negative deltas
-                                                    i_TMP_Val = int(s_TMP_Val) - int(s_TMP_LastVal)
-                                                    if i_TMP_Val > 0:
-                                                        b_GoPos = True
-                                                        i_TMP_Val = int(s_TMP_LastVal) + int(i_TMP_Delta)
-                                                    else:
-                                                        b_GoPos = False
-                                                        i_TMP_Val = int(s_TMP_LastVal) - int(i_TMP_Delta)                                          
-                                                    if b_GoPos == True and b_SndMsg == False:
-                                                        if int(s_TMP_Val) >= i_TMP_Val:
-                                                            b_SndMsg = True                                        
-                                                    if b_GoPos == False and b_SndMsg == False:
-                                                        if int(s_TMP_Val) <= i_TMP_Val:
-                                                            b_SndMsg = True                                        
+                        #add a error trap incase msg config is invalid
+                        try:
+                            #skip if msg is disabled
+                            if j_AllMsgs["Enabled"] != "Y":
+                                continue
+                            # get the mqtt parameters first
+                            s_TMP_Topic = j_Msg["MQTT_Topic_Path"]
+                            s_TMP_Topic = s_TMP_Topic.replace(self.RepStr_MachineName, self.s_MachineName)
+                            s_TMP_MsgText = j_Msg["MQTT_Topic_MSG"]
+                            #ensure conditional booleans are re-set for each msg
+                            b_Match_Found = False
+                            b_SndMsg = False
+                            #Iterate through msg variable groups in json config
+                            for j_VarList in j_AllMsgs["JSON_Variables"]:
+                                s_TMP_DSF_Variable_Type = j_VarList["DSF_Variable_Type"]
+                                s_TMP_DSF_DOM_Path = j_VarList["DSF_DOM_Path"]
+                                s_TMP_Trigger_Msg = j_VarList["Trigger_Msg"]
+                                # get the msg variables to evaluate in the subscription update json from DSF
+                                #iterate through in the individual msg variables in the msg variabls group
+                                for j_Variables in j_VarList["Variables"]:
+                                    i_TMP_instance = int(j_Variables["instance"])
+                                    s_TMP_Variable = j_Variables["Variable"]
+                                    s_TMP_Replace_String = j_Variables["Replace_String"]
+                                    s_TMP_Var_Type = j_Variables["Var_Type"]
+                                    s_TMP_LastVal = j_Variables["lastval"]
+                                    i_TMP_Delta = int(j_Variables["Msg_Delta"])
+                                    if s_TMP_DSF_Variable_Type == "ARRAY":
+                                        s_TMP_Val = self._getValFromArray(j_machine_model2, s_TMP_Variable, i_TMP_instance, s_TMP_DSF_DOM_Path)
+                                    if s_TMP_DSF_Variable_Type == "SINGLE":
+                                        s_TMP_Val = self._getValFromKeys(j_machine_model2, str(str(s_TMP_DSF_DOM_Path) + "/" + str(s_TMP_Variable)))
+                                    if len(str(s_TMP_Val)) > 0 and str(s_TMP_Val) != "None":
+                                        #We Have a Match so lets process & update the values and msg text
+                                        #see if we should based on delta settings - if curr val is greater than delta from last val then snd msg
+                                        s_TMP_DSF_Val = s_TMP_Val
+                                        #if Trigger_Msg is set "N" then never trigger a msg from this msg variable - the msg will be triggered by diff variables
+                                        if s_TMP_Trigger_Msg == "Y":
+                                            if str(s_TMP_LastVal) != "noLast" and s_TMP_Var_Type != "string":
+                                                if int(i_TMP_Delta) != 0:
+                                                    if b_SndMsg == False:
+                                                        #deal with positive or negative deltas
+                                                        i_TMP_Val = int(s_TMP_Val) - int(s_TMP_LastVal)
+                                                        if i_TMP_Val > 0:
+                                                            b_GoPos = True
+                                                            i_TMP_Val = int(s_TMP_LastVal) + int(i_TMP_Delta)
+                                                        else:
+                                                            b_GoPos = False
+                                                            i_TMP_Val = int(s_TMP_LastVal) - int(i_TMP_Delta)                                          
+                                                        if b_GoPos == True and b_SndMsg == False:
+                                                            if int(s_TMP_Val) >= i_TMP_Val:
+                                                                b_SndMsg = True                                        
+                                                        if b_GoPos == False and b_SndMsg == False:
+                                                            if int(s_TMP_Val) <= i_TMP_Val:
+                                                                b_SndMsg = True                                        
+                                                else:
+                                                    b_SndMsg = True
                                             else:
                                                 b_SndMsg = True
-                                        else:
-                                            b_SndMsg = True
-                                    #check for special processing requirements (msgType)
-                                    if s_TMP_MsgType == "DSF":
-                                        #This msg needs special formatting
-                                        s_TMP_Val = self._processDSFMsgs(str(s_TMP_Val))
-                                    if s_TMP_Var_Type == "time":
-                                        #The value needs formatting into time
-                                        s_TMP_Val = time.strftime("%H:%M:%S", time.gmtime(int(s_TMP_Val)))
-                                    s_TMP_MsgText = s_TMP_MsgText.replace(str(s_TMP_Replace_String), str(s_TMP_Val))
-                                    b_Match_Found = True
-                                else:
-                                    # If null just remove replace string from msg with NULL so we no no value was provided from the dom
-                                    s_TMP_MsgText = s_TMP_MsgText.replace(str(s_TMP_Replace_String), str("NULL"))
-                                if b_SndMsg == True: 
-                                    # We are going to snd a msg so update lastval
-                                    if s_TMP_Var_Type != "string":
-                                        j_Variables["lastval"] = int(s_TMP_DSF_Val)
+                                        #check for special processing requirements (msgType)
+                                        if s_TMP_MsgType == "DSF":
+                                            #This msg needs special formatting
+                                            s_TMP_Val = self._processDSFMsgs(str(s_TMP_Val))
+                                        if s_TMP_Var_Type == "time":
+                                            #The value needs formatting into time
+                                            s_TMP_Val = time.strftime("%H:%M:%S", time.gmtime(int(s_TMP_Val)))
+                                        s_TMP_MsgText = s_TMP_MsgText.replace(str(s_TMP_Replace_String), str(s_TMP_Val))
+                                        b_Match_Found = True
                                     else:
-                                        j_Variables["lastval"] = str(s_TMP_DSF_Val)
-                        if b_Match_Found == True and b_SndMsg == True:
-                            s_TMP_MsgText = s_TMP_MsgText.replace(self.RepStr_MachineName, self.s_MachineName)
-                            self.MsgQ.put((str(s_TMP_Topic), str(s_TMP_MsgText)))
+                                        # If null just remove replace string from msg with NULL so we no no value was provided from the dom
+                                        s_TMP_MsgText = s_TMP_MsgText.replace(str(s_TMP_Replace_String), str("NULL"))
+                                    if b_SndMsg == True: 
+                                        # We are going to snd a msg so update lastval
+                                        if s_TMP_Var_Type != "string":
+                                            j_Variables["lastval"] = int(s_TMP_DSF_Val)
+                                        else:
+                                            j_Variables["lastval"] = str(s_TMP_DSF_Val)
+                            if b_Match_Found == True and b_SndMsg == True:
+                                s_TMP_MsgText = s_TMP_MsgText.replace(self.RepStr_MachineName, self.s_MachineName)
+                                self.MsgQ.put((str(s_TMP_Topic), str(s_TMP_MsgText)))
+                        except Exception as ex:
+                            self.logQ.put(("ERROR", str("MQTT4DSF_PollingMonitor: MSG Name :  " + str(j_AllMsgs["MsgName"]) + "Configuration is invalid. Check config file for this msg's settings. Technical Err: " + str(ex))))
             except Exception as ex:
                 self.logQ.put(("ERROR", str("MQTT4DSF_PollingMonitor _timedMonitoring : " + str(ex))))
             # Polling Delay Here
