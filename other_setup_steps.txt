@@ -8,3 +8,4 @@ cd DSF-APIs-pydsfapi-v3.1.3/pydsfapi
 sudo python3 setup.py install
 
 sudo pip3 install paho-mqtt
+sudo pip3 install requests
