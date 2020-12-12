@@ -1,5 +1,5 @@
 #!/bin/bash
-wget -O MQTT4DSF.tar.gz "https://github.com/MintyTrebor/MQTT4DSF/releases/download/v0.10-ALPHA/MQTT4DSF.tar.gz"
+wget -O MQTT4DSF.tar.gz "https://github.com/MintyTrebor/MQTT4DSF/releases/download/v0.11-ALPHA/MQTT4DSF.tar.gz"
 sudo chmod a+rwx MQTT4DSF.tar.gz
 mkdir MQTT4DSF
 sudo chmod a+rw MQTT4DSF
