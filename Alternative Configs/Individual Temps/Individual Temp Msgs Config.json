@@ -1,0 +1,72 @@
+		{
+            "MsgName" : "CurrBedTemp",
+            "Type" : "STD",
+            "Enabled" : "Y",
+            "JSON_Variables" : [
+                {   
+                    "DSF_Variable_Type" : "ARRAY",
+                    "DSF_DOM_Path" : "sensors/analog",
+                    "Trigger_Msg" : "Y",
+                    "Variables" : [                
+                        {"Variable" : "lastReading", "instance" : 0, "Replace_String" : "[!*0LastRead*!]", "Var_Type" : "int", "Msg_Delta" : 2, "lastval" : "noLast"}
+                    ]
+                }
+            ],
+            "Msgs" : [
+                {"MQTT_Topic_Path" : "Duet/[!*MachineName*!]/CurrBedTemp", "MQTT_Topic_MSG" : "[!*0LastRead*!]"}
+            ]
+        },
+        {
+            "MsgName" : "TargBedTemp",
+            "Type" : "STD",
+            "Enabled" : "Y",
+            "JSON_Variables" : [
+                {   
+                    "DSF_Variable_Type" : "ARRAY",
+                    "DSF_DOM_Path" : "heat/heaters",
+                    "Trigger_Msg" : "Y",
+                    "Variables" : [                
+                        {"Variable" : "active", "instance" : 0, "Replace_String" : "[!*0HeatTarg*!]", "Var_Type" : "int", "Msg_Delta" : 0, "lastval" : "noLast"}
+                    ]
+                }
+            ],
+            "Msgs" : [
+                {"MQTT_Topic_Path" : "Duet/[!*MachineName*!]/TargBedTemp", "MQTT_Topic_MSG" : "[!*0HeatTarg*!]"}
+            ]
+        },
+        {
+            "MsgName" : "CurrT0Temp",
+            "Type" : "STD",
+            "Enabled" : "Y",
+            "JSON_Variables" : [
+                {   
+                    "DSF_Variable_Type" : "ARRAY",
+                    "DSF_DOM_Path" : "sensors/analog",
+                    "Trigger_Msg" : "Y",
+                    "Variables" : [                
+                        {"Variable" : "lastReading", "instance" : 1, "Replace_String" : "[!*1LastRead*!]", "Var_Type" : "int", "Msg_Delta" : 2, "lastval" : "noLast"}
+                    ]
+                }
+            ],
+            "Msgs" : [
+                {"MQTT_Topic_Path" : "Duet/[!*MachineName*!]/CurrT0Temp", "MQTT_Topic_MSG" : "[!*1LastRead*!]"}
+            ]
+        },
+        {
+            "MsgName" : "TargT0Temp",
+            "Type" : "STD",
+            "Enabled" : "Y",
+            "JSON_Variables" : [
+                {   
+                    "DSF_Variable_Type" : "ARRAY",
+                    "DSF_DOM_Path" : "heat/heaters",
+                    "Trigger_Msg" : "Y",
+                    "Variables" : [                
+                        {"Variable" : "active", "instance" : 1, "Replace_String" : "[!*1HeatTarg*!]", "Var_Type" : "int", "Msg_Delta" : 0, "lastval" : "noLast"}
+                    ]
+                }
+            ],
+            "Msgs" : [
+                {"MQTT_Topic_Path" : "Duet/[!*MachineName*!]/TargT0Temp", "MQTT_Topic_MSG" : "[!*1HeatTarg*!]"}
+            ]
+        }
