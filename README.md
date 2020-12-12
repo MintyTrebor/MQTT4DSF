@@ -14,7 +14,7 @@ This has only been tested on a raspberry pi running DSF from [https://github.com
 
 Note: Currently MQTT4DSF is developed using Beta versions of DSF, and therefore much of this code is subject to change.. Best efforts have been made, but further optimisation is required. MQTT4DSF does not currently support secure MQTT brokers (using SSL certificates).
   
-**MQTT4DSF has been tested with -DSF FW Ver: 3.2-beta3.2_1 -Board FW Ver: 3.2-beta3.2_1. However it should work with any 3.1.1+ version according to the pydsfapi plugin documentation.   Prior to 3.2 the DSF RestAPI returned a different format of the object model, by prefixing it with 'response'. If you deploy this service on DSF lower than 3.2 you may have to adjust the configuration file to reflect this by changing "MONITORED_MQTT_MSGS/JSON_Variables/DSF_DOM_Path" values. This only applies to "MONITORED_MQTT_MSGS".**   
+**MQTT4DSF has been tested with -DSF FW Ver: 3.2.0-beta3 -Board FW Ver: 3.2-beta3.2_1. However it should work with any 3.1.1+ version according to the pydsfapi plugin documentation.  
 
 # Background and use-case  
 I decided to put this together after a conversation about MQTT with DUET over on [discord](https://discord.gg/fw3Gqpw) (plus it was an excuse for me to cut my teeth on Python)! MQTT4DSF is designed to be used as a mechanism to integrate DSF with automation applications and other MQTT based services (like dashboards). This can be useful for controlling external devices based on machine events from DSF, building multifunction dashboards for multiple machines (eg print farms), and creating rule based event handling. Some examples of use could include:  
@@ -37,7 +37,7 @@ Please refer to the [other_setup_steps.txt](https://github.com/MintyTrebor/MQTT4
 
 Once the dependencies are installed and running, run the following command from your home folder :
 
-    sudo wget -O - https://github.com/MintyTrebor/MQTT4DSF/releases/download/v0.10-ALPHA/Setup_MQTT4DSF.sh | bash
+    sudo wget -O - https://github.com/MintyTrebor/MQTT4DSF/releases/download/v0.11-ALPHA/Setup_MQTT4DSF.sh | bash
 
 This will deploy MQTT4DSF as a service to the DSF plugin directory. You should review the script before running to ensure you are happy with the approach, or if you wish to deploy manually.
 
