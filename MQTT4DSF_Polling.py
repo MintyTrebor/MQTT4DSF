@@ -39,11 +39,19 @@ class MQTT4DSF_PollingMonitor:
                 s_machine_model = requests.get(url = self.s_DSF_HTTP_REQ_URL)
                 #define machine json
                 j_machine_model = json.loads(s_machine_model.text)
+                #Check top level path to deal with differing formats of the returned data from rest api
+                try:
+                    j_machine_model = j_machine_model["result"]
+                except KeyError:
+                    j_machine_model = json.loads(s_machine_model.text)
                 s_machine_model = None
                 #Get Machine Details - (Always get first instances)
-                s_Machine_IP = str(j_machine_model["network"]["interfaces"][0]["actualIP"])
-                s_Machine_DSF_Ver = str(j_machine_model["state"]["dsfVersion"])
-                s_Machine_Board_FW_ver = str(j_machine_model["boards"][0]["firmwareVersion"])
+                try:
+                    s_Machine_IP = str(j_machine_model["network"]["interfaces"][0]["actualIP"])
+                    s_Machine_DSF_Ver = str(j_machine_model["state"]["dsfVersion"])
+                    s_Machine_Board_FW_ver = str(j_machine_model["boards"][0]["firmwareVersion"])
+                except KeyError:
+                    self.logQ.put(("ERROR", str("MQTT4DSF_PollingMonitor getInitialInfo : json format has changed : " + str(ex))))
                 s_Machine_Initial_Msg = "NOW ONLINE:: Machine: " + self.s_MachineName + " -IP: " +str(s_Machine_IP) + " -DSF FW Ver: " + str(s_Machine_DSF_Ver) + " -Board FW Ver: " + str(s_Machine_Board_FW_ver)
                 # Send msg to to Sys Msg Topic
                 self.MsgQ.put((self.s_SYSTEM_MSG_TOPIC, s_Machine_Initial_Msg))
@@ -119,15 +127,20 @@ class MQTT4DSF_PollingMonitor:
                 s_machine_model = requests.get(url = self.s_DSF_HTTP_REQ_URL)
                 #define machine json
                 j_machine_model2 = json.loads(s_machine_model.text)
+                #Check top level path to deal with differing formats of the returned data from rest api
+                try:
+                    j_machine_model2 = j_machine_model2["result"]
+                except KeyError:
+                    j_machine_model2 = json.loads(s_machine_model.text)
                 s_machine_model = None
                 for j_AllMsgs in self.j_MQTT4DSF_MONMSGS:
+                    #skip if msg is disabled
+                    if j_AllMsgs["Enabled"] != "Y":
+                        continue
                     s_TMP_MsgType = j_AllMsgs["Type"]
                     for j_Msg in j_AllMsgs["Msgs"]:
                         #add a error trap incase msg config is invalid
                         try:
-                            #skip if msg is disabled
-                            if j_AllMsgs["Enabled"] != "Y":
-                                continue
                             # get the mqtt parameters first
                             s_TMP_Topic = j_Msg["MQTT_Topic_Path"]
                             s_TMP_Topic = s_TMP_Topic.replace(self.RepStr_MachineName, self.s_MachineName)
@@ -202,7 +215,7 @@ class MQTT4DSF_PollingMonitor:
                                 s_TMP_MsgText = s_TMP_MsgText.replace(self.RepStr_MachineName, self.s_MachineName)
                                 self.MsgQ.put((str(s_TMP_Topic), str(s_TMP_MsgText)))
                         except Exception as ex:
-                            self.logQ.put(("ERROR", str("MQTT4DSF_PollingMonitor: MSG Name :  " + str(j_AllMsgs["MsgName"]) + " : Configuration is invalid. Check config file for this msg's settings. Technical Err: " + str(ex))))
+                            self.logQ.put(("ERROR", str("MQTT4DSF_PollingMonitor: MSG Name :  " + str(j_AllMsgs["MsgName"]) + "Configuration is invalid. Check config file for this msg's settings. Technical Err: " + str(ex))))
             except Exception as ex:
                 self.logQ.put(("ERROR", str("MQTT4DSF_PollingMonitor _timedMonitoring : " + str(ex))))
             # Polling Delay Here
