@@ -1,6 +1,8 @@
 # MQTT4DSF
 **A Python script/service to send MQTT msgs from a SBC running Duet DSF. Uses the DSF pydsfapi plugin.**
-  
+
+### Note: I consider this project superseeded by my [NodeDSF](https://github.com/MintyTrebor/NodeDSF) solution, which can deliver the same functionality as MQTT4DSF + significantly more. I encourage you to check it out as an alternative to MQTT4DSF. 
+
 **Currently it can:**  
   
  1. Subscribe to user defined DSF events and send mqtt msgs to a broker of choice on receipt of event (user configurable)
